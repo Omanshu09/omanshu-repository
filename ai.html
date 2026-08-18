@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Omanshu AI</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --bg:#0b100e;
+    --bg2:#111813;
+    --panel:rgba(22,30,25,.72);
+    --panel-strong:rgba(25,34,28,.92);
+    --line:rgba(168,183,172,.15);
+    --line-hover:rgba(201,155,74,.5);
+    --text:#edf2ed;
+    --muted:#9eaaa1;
+    --faint:#657169;
+    --gold:#c99b4a;
+    --gold-soft:#e1bd7c;
+    --teal:#4fa695;
+    --display:'Space Grotesk',sans-serif;
+    --body:'Inter',sans-serif;
+    --mono:'IBM Plex Mono',monospace;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  html,body{width:100%;height:100%}
+
+  body{
+    background:
+      radial-gradient(circle at 50% 35%, rgba(79,166,149,.08), transparent 28%),
+      radial-gradient(circle at 80% 80%, rgba(201,155,74,.055), transparent 25%),
+      linear-gradient(145deg,var(--bg),var(--bg2));
+    color:var(--text);
+    font-family:var(--body);
+    overflow:hidden;
+  }
+
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background-image:
+      linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+    background-size:60px 60px;
+    mask-image:linear-gradient(to bottom,transparent,#000 18%,#000 82%,transparent);
+  }
+
+  body::after{
+    content:"";
+    position:fixed;
+    width:480px;
+    height:480px;
+    left:50%;
+    top:43%;
+    transform:translate(-50%,-50%);
+    border:1px solid rgba(79,166,149,.06);
+    border-radius:50%;
+    box-shadow:
+      0 0 0 80px rgba(79,166,149,.015),
+      0 0 0 160px rgba(79,166,149,.01);
+    pointer-events:none;
+  }
+
+  button,input{font:inherit}
+
+  .topbar{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    height:88px;
+    padding:0 5vw;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    z-index:20;
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    color:var(--text);
+    text-decoration:none;
+    font-family:var(--display);
+    font-size:18px;
+    font-weight:600;
+    letter-spacing:.08em;
+  }
+
+  .brand-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--gold);
+    box-shadow:0 0 14px rgba(201,155,74,.75);
+  }
+
+  .brand span:last-child{
+    color:var(--muted);
+    font-family:var(--mono);
+    font-size:10px;
+    font-weight:400;
+    letter-spacing:.14em;
+    margin-left:4px;
+  }
+
+  .close-btn{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.025);
+    color:var(--muted);
+    cursor:pointer;
+    display:grid;
+    place-items:center;
+    transition:.25s ease;
+    font-size:20px;
+  }
+
+  .close-btn:hover{
+    border-color:var(--gold);
+    color:var(--gold-soft);
+    transform:rotate(90deg);
+    background:rgba(201,155,74,.07);
+  }
+
+  .app{
+    position:relative;
+    z-index:2;
+    width:min(1000px,90vw);
+    height:100vh;
+    margin:auto;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:108px 0 30px;
+  }
+
+  .hero{
+    text-align:center;
+    width:100%;
+    transition:.45s ease;
+  }
+
+  .hero.compact{
+    transform:translateY(-22px);
+  }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:7px 12px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    color:var(--muted);
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.12em;
+    background:rgba(255,255,255,.025);
+    backdrop-filter:blur(12px);
+  }
+
+  .status-dot{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:var(--teal);
+    box-shadow:0 0 10px rgba(79,166,149,.8);
+    animation:pulse 2s infinite;
+  }
+
+  @keyframes pulse{
+    0%,100%{opacity:.55;transform:scale(.9)}
+    50%{opacity:1;transform:scale(1.15)}
+  }
+
+  h1{
+    margin-top:25px;
+    font-family:var(--display);
+    font-size:clamp(42px,7vw,76px);
+    line-height:.98;
+    letter-spacing:-.055em;
+    font-weight:600;
+  }
+
+  h1 em{
+    font-style:normal;
+    color:var(--gold-soft);
+  }
+
+  .subtitle{
+    margin:17px auto 0;
+    max-width:580px;
+    color:var(--muted);
+    font-size:15px;
+    line-height:1.7;
+  }
+
+  .suggestions{
+    margin:30px auto 0;
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:9px;
+    max-width:700px;
+    transition:.35s ease;
+  }
+
+  .suggestions.hidden{
+    opacity:0;
+    pointer-events:none;
+    transform:translateY(-10px);
+    height:0;
+    margin:0;
+    overflow:hidden;
+  }
+
+  .suggestion{
+    border:1px solid var(--line);
+    color:#c3ccc5;
+    background:rgba(255,255,255,.025);
+    padding:10px 14px;
+    border-radius:999px;
+    cursor:pointer;
+    font-size:12px;
+    transition:.22s ease;
+  }
+
+  .suggestion:hover{
+    border-color:var(--line-hover);
+    color:var(--gold-soft);
+    background:rgba(201,155,74,.055);
+    transform:translateY(-2px);
+  }
+
+  .chat{
+    width:min(760px,100%);
+    margin-top:35px;
+    display:flex;
+    flex-direction:column;
+    flex:1;
+    min-height:0;
+  }
+
+  .messages{
+    flex:1;
+    overflow-y:auto;
+    padding:10px 4px 18px;
+    scroll-behavior:smooth;
+    scrollbar-width:thin;
+    scrollbar-color:rgba(168,183,172,.2) transparent;
+  }
+
+  .messages:empty{display:none}
+
+  .message{
+    display:flex;
+    margin:13px 0;
+    animation:messageIn .35s ease both;
+  }
+
+  @keyframes messageIn{
+    from{opacity:0;transform:translateY(9px)}
+    to{opacity:1;transform:none}
+  }
+
+  .message.user{justify-content:flex-end}
+
+  .bubble{
+    max-width:78%;
+    padding:13px 16px;
+    border-radius:17px;
+    font-size:14px;
+    line-height:1.65;
+  }
+
+  .message.ai .bubble{
+    background:rgba(255,255,255,.035);
+    border:1px solid var(--line);
+    border-bottom-left-radius:5px;
+    color:#d9e0da;
+  }
+
+  .message.user .bubble{
+    background:rgba(201,155,74,.12);
+    border:1px solid rgba(201,155,74,.24);
+    border-bottom-right-radius:5px;
+    color:#eee4d3;
+  }
+
+  .message-label{
+    display:block;
+    margin-bottom:5px;
+    font-family:var(--mono);
+    font-size:9px;
+    letter-spacing:.1em;
+    color:var(--faint);
+  }
+
+  .composer{
+    position:relative;
+    width:100%;
+    border:1px solid rgba(168,183,172,.2);
+    border-radius:20px;
+    background:rgba(17,24,20,.82);
+    box-shadow:0 20px 60px rgba(0,0,0,.3);
+    backdrop-filter:blur(22px);
+    transition:.25s ease;
+  }
+
+  .composer:focus-within{
+    border-color:rgba(201,155,74,.55);
+    box-shadow:0 20px 70px rgba(0,0,0,.38),0 0 0 3px rgba(201,155,74,.045);
+  }
+
+  .input{
+    width:100%;
+    min-height:64px;
+    max-height:150px;
+    resize:none;
+    border:0;
+    outline:0;
+    background:transparent;
+    color:var(--text);
+    padding:20px 66px 18px 20px;
+    font-size:14px;
+    line-height:1.5;
+  }
+
+  .input::placeholder{color:#68746c}
+
+  .send{
+    position:absolute;
+    right:10px;
+    bottom:10px;
+    width:42px;
+    height:42px;
+    border:0;
+    border-radius:13px;
+    background:var(--gold);
+    color:#15120c;
+    cursor:pointer;
+    display:grid;
+    place-items:center;
+    font-size:18px;
+    transition:.2s ease;
+  }
+
+  .send:hover{
+    background:var(--gold-soft);
+    transform:translateY(-1px);
+    box-shadow:0 8px 25px rgba(201,155,74,.18);
+  }
+
+  .send:active{transform:scale(.95)}
+
+  .send:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+    transform:none;
+    box-shadow:none;
+  }
+
+  .hint{
+    text-align:center;
+    color:#5f6a63;
+    font-family:var(--mono);
+    font-size:9px;
+    letter-spacing:.08em;
+    margin-top:10px;
+  }
+
+  .typing{
+    display:flex;
+    gap:4px;
+    padding:5px 0;
+  }
+
+  .typing i{
+    display:block;
+    width:5px;
+    height:5px;
+    border-radius:50%;
+    background:var(--muted);
+    animation:typing 1.1s infinite;
+  }
+
+  .typing i:nth-child(2){animation-delay:.15s}
+  .typing i:nth-child(3){animation-delay:.3s}
+
+  @keyframes typing{
+    0%,60%,100%{opacity:.25;transform:translateY(0)}
+    30%{opacity:1;transform:translateY(-3px)}
+  }
+
+  .footer{
+    position:fixed;
+    bottom:22px;
+    left:5vw;
+    right:5vw;
+    display:flex;
+    justify-content:space-between;
+    color:#566159;
+    font-family:var(--mono);
+    font-size:9px;
+    letter-spacing:.1em;
+    z-index:10;
+    pointer-events:none;
+  }
+
+  .footer span:last-child{color:#6b756e}
+
+  @media(max-width:700px){
+    .topbar{height:75px}
+    .app{width:88vw;padding-top:92px}
+    h1{font-size:48px}
+    .subtitle{font-size:13px}
+    .suggestions{margin-top:22px}
+    .suggestion{font-size:11px;padding:9px 12px}
+    .chat{margin-top:24px}
+    .bubble{max-width:88%;font-size:13px}
+    .footer{display:none}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+      animation-duration:.001ms!important;
+      animation-iteration-count:1!important;
+      scroll-behavior:auto!important;
+      transition-duration:.001ms!important;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <a href="index.html" class="brand" aria-label="Back to Omanshu home">
+    <span class="brand-dot"></span>
+    <span>OMANSHU BHATT</span>
+    <span>/ AI</span>
+  </a>
+
+  <button class="close-btn" id="closeBtn" aria-label="Return to home">×</button>
+</header>
+
+<main class="app">
+
+  <section class="hero" id="hero">
+    <div class="eyebrow">
+      <span class="status-dot"></span>
+      PERSONAL AI INTERFACE
+    </div>
+
+    <h1>Ask <em>anything</em><br>about me.</h1>
+
+    <p class="subtitle">
+      A small interactive space to explore who I am, what I build,
+      what I know, and where I'm headed.
+    </p>
+
+    <div class="suggestions" id="suggestions">
+      <button class="suggestion">Who is Omanshu?</button>
+      <button class="suggestion">What are his skills?</button>
+      <button class="suggestion">Tell me about his projects</button>
+      <button class="suggestion">What did he study?</button>
+      <button class="suggestion">What certifications does he have?</button>
+    </div>
+  </section>
+
+  <section class="chat">
+    <div class="messages" id="messages"></div>
+
+    <form class="composer" id="composer">
+      <textarea
+        id="input"
+        class="input"
+        rows="1"
+        placeholder="Ask anything about me..."
+        autocomplete="off"
+      ></textarea>
+
+      <button class="send" id="send" type="submit" aria-label="Send">
+        ↑
+      </button>
+    </form>
+
+    <div class="hint">PRESS ENTER TO ASK · SHIFT + ENTER FOR NEW LINE</div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <span>OMANSHU AI · 2026</span>
+  <span>BUILT FOR CURIOSITY</span>
+</footer>
+
+<script src="resumeData.js"></script>
+<script src="webConnector.js"></script>
+<script>
+  /*
+    ============================================================
+    OMANSHU AI — RESUME + GENERAL WEB KNOWLEDGE
+    ============================================================
+    Personal answers come from resumeData.js.
+    General/basic questions use webConnector.js.
+  */
+
+  function allSkills(){
+    return [
+      ...(resumeData.skills.languages || []),
+      ...(resumeData.skills.web || []),
+      ...(resumeData.skills.database || []),
+      ...(resumeData.skills.aiMl || []),
+      ...(resumeData.skills.core || []),
+      ...(resumeData.skills.tools || [])
+    ];
+  }
+
+  function list(items){
+    return (items || []).map(item => `<strong>${escapeHTML(String(item))}</strong>`).join(", ");
+  }
+
+  function educationAnswer(){
+    return (resumeData.education || []).map(e => {
+      const main = e.degree || e.qualification || "";
+      const extra = e.degree
+        ? ` · ${e.duration || ""} · CGPA ${e.cgpa || "—"}`
+        : ` · ${e.percentage || "—"}`;
+      return `<strong>${escapeHTML(e.institution || "")}</strong> — ${escapeHTML(main)}${escapeHTML(extra)}`;
+    }).join("<br>");
+  }
+
+  function projectsAnswer(){
+    return (resumeData.projects || []).map(p => {
+      const details = (p.details || []).map(d => escapeHTML(d)).join(" ");
+      const tech = p.technologies?.length
+        ? `<br><br><span style="color:#9eaaa1">Technologies:</span> ${list(p.technologies)}`
+        : "";
+      return `<strong>${escapeHTML(p.name || "")}</strong>${p.type ? ` <span style="color:#9eaaa1">· ${escapeHTML(p.type)}</span>` : ""}<br>${details}${tech}`;
+    }).join("<br><br>");
+  }
+
+  function experienceAnswer(){
+    return (resumeData.internships || []).map(i => {
+      const duration = i.duration ? ` (${escapeHTML(i.duration)})` : "";
+      return `<strong>${escapeHTML(i.organization || "")}</strong> — ${escapeHTML(i.role || "")}${duration}<br>` +
+        (i.details || []).map(d => escapeHTML(d)).join(" ");
+    }).join("<br><br>");
+  }
+
+  function skillsAnswer(){
+    return `
+      <strong>Languages:</strong> ${list(resumeData.skills.languages)}<br>
+      <strong>Web & Frameworks:</strong> ${list(resumeData.skills.web)}<br>
+      <strong>Data & Databases:</strong> ${list(resumeData.skills.database)}<br>
+      <strong>AI / ML:</strong> ${list(resumeData.skills.aiMl)}<br>
+      <strong>Core CS:</strong> ${list(resumeData.skills.core)}<br>
+      <strong>Tools:</strong> ${list(resumeData.skills.tools)}
+    `;
+  }
+
+  function findProject(question){
+    const q = question.toLowerCase();
+    return (resumeData.projects || []).find(p => {
+      const words = p.name.toLowerCase().split(/\s+/).filter(w => w.length > 3);
+      return words.some(w => q.includes(w));
+    });
+  }
+
+  function resumeAnswer(question){
+    const q = question.toLowerCase().trim();
+    if(!q) return null;
+
+    // Exact personal fields.
+    if(/\b(date of birth|dob|birthday|birth date)\b/.test(q)){
+      return resumeData.dateOfBirth
+        ? `Omanshu's date of birth is <strong>${escapeHTML(resumeData.dateOfBirth)}</strong>.`
+        : "The current resume does not include Omanshu's date of birth.";
+    }
+
+    if(/\b(age|how old)\b/.test(q)){
+      return resumeData.age != null
+        ? `Omanshu is <strong>${escapeHTML(String(resumeData.age))}</strong> years old.`
+        : "The current resume does not state Omanshu's age.";
+    }
+
+    // Identity / summary.
+    if(
+      q.includes("name") ||
+      q.includes("who is omanshu") ||
+      q.includes("who is he") ||
+      q.includes("who are you") ||
+      q.includes("tell me about yourself") ||
+      q.includes("about yourself") ||
+      q.includes("introduce omanshu") ||
+      q.includes("profile")
+    ){
+      return `<strong>${escapeHTML(resumeData.name)}</strong> is a Computer Engineering graduate based in ${escapeHTML(resumeData.location)}. ${escapeHTML(resumeData.summary)}`;
+    }
+
+    // Contact.
+    if(q.includes("contact") || q.includes("email") || q.includes("phone") || q.includes("number")){
+      return `The resume lists <strong>${escapeHTML(resumeData.email)}</strong> and <strong>${escapeHTML(resumeData.phone)}</strong>.`;
+    }
+
+    // Education.
+    if(
+      q.includes("education") || q.includes("degree") || q.includes("college") ||
+      q.includes("university") || q.includes("study") || q.includes("studied") ||
+      q.includes("cgpa") || q.includes("school") || q.includes("percentage") ||
+      q.includes("qualification") || q.includes("graduat")
+    ){
+      return educationAnswer();
+    }
+
+    // Skills / AI stack.
+    if(
+      q.includes("skill") || q.includes("technology") || q.includes("technologies") ||
+      q.includes("tech stack") || q.includes("programming language") ||
+      q.includes("framework") || q.includes("database") || q.includes("ai/ml") ||
+      q.includes("artificial intelligence") || q.includes("machine learning") ||
+      q.includes("tools") || q.includes("know")
+    ){
+      return skillsAnswer();
+    }
+
+    // Projects, including project-specific questions.
+    const project = findProject(q);
+    if(project){
+      const details = (project.details || []).map(d => escapeHTML(d)).join(" ");
+      return `<strong>${escapeHTML(project.name)}</strong><br>${details}<br><br><span style="color:#9eaaa1">Technologies:</span> ${list(project.technologies)}`;
+    }
+
+    if(
+      q.includes("project") || q.includes("built") || q.includes("build") ||
+      q.includes("developed") || q.includes("created")
+    ){
+      return projectsAnswer();
+    }
+
+    // Experience.
+    if(
+      q.includes("internship") || q.includes("experience") ||
+      q.includes("intern") || q.includes("worked") || q.includes("work experience")
+    ){
+      return experienceAnswer();
+    }
+
+    // Certifications.
+    if(q.includes("certification") || q.includes("certificate") || q.includes("course")){
+      return list(resumeData.certifications);
+    }
+
+    // Languages can mean spoken languages OR programming languages.
+    if(q.includes("programming language") || q.includes("coding language")){
+      return `Programming languages listed on the resume: ${list(resumeData.skills.languages)}.`;
+    }
+
+    // Interests only if actual data exists.
+    if(q.includes("interest") || q.includes("hobby") || q.includes("hobbies")){
+      if(resumeData.interests?.length){
+        return `Interests listed on the resume: ${list(resumeData.interests)}.`;
+      }
+      return "The current resume does not list personal interests or hobbies.";
+    }
+
+    // A generic fallback is null so the web connector gets a chance.
+    return null;
+  }
+
+  async function answerQuestion(question){
+    const personal = resumeAnswer(question);
+
+    // If the resume has a definite answer (including "not stated"), use it.
+    if(personal !== null) return personal;
+
+    // Otherwise try calculator / web knowledge.
+    if(window.webConnector){
+      const result = await window.webConnector.ask(question);
+      if(result?.answer){
+        const source = result.source && result.source !== "calculator" && result.source !== "local facts"
+          ? `<br><span style="font-size:10px;color:#657169">Source: ${escapeHTML(result.source)}</span>`
+          : "";
+        return escapeHTML(result.answer).replace(/\n/g, "<br>") + source;
+      }
+    }
+
+    return `I don't know that yet. I can answer questions about Omanshu's resume, or simple factual questions.`;
+  }
+
+  const messages = document.getElementById("messages");
+  const input = document.getElementById("input");
+  const composer = document.getElementById("composer");
+  const send = document.getElementById("send");
+  const suggestions = document.getElementById("suggestions");
+  const hero = document.getElementById("hero");
+  const closeBtn = document.getElementById("closeBtn");
+
+  function addMessage(type, text, animate = true){
+    const wrapper = document.createElement("div");
+    wrapper.className = "message " + type;
+
+    if(!animate) wrapper.style.animation = "none";
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+
+    const label = document.createElement("span");
+    label.className = "message-label";
+    label.textContent = type === "user" ? "YOU" : "OMANSHU AI";
+
+    bubble.appendChild(label);
+
+    const content = document.createElement("span");
+    content.innerHTML = text;
+    bubble.appendChild(content);
+
+    wrapper.appendChild(bubble);
+    messages.appendChild(wrapper);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function escapeHTML(text){
+    return String(text)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  function showTyping(){
+    const wrapper = document.createElement("div");
+    wrapper.className = "message ai";
+    wrapper.id = "typingMessage";
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+
+    const label = document.createElement("span");
+    label.className = "message-label";
+    label.textContent = "OMANSHU AI";
+
+    const typing = document.createElement("div");
+    typing.className = "typing";
+    typing.innerHTML = "<i></i><i></i><i></i>";
+
+    bubble.appendChild(label);
+    bubble.appendChild(typing);
+    wrapper.appendChild(bubble);
+    messages.appendChild(wrapper);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function removeTyping(){
+    document.getElementById("typingMessage")?.remove();
+  }
+
+  async function ask(question){
+    question = question.trim();
+    if(!question) return;
+
+    addMessage("user", escapeHTML(question));
+    input.value = "";
+    input.style.height = "auto";
+    send.disabled = true;
+
+    hero.classList.add("compact");
+    suggestions.classList.add("hidden");
+    showTyping();
+
+    try{
+      const answer = await answerQuestion(question);
+      removeTyping();
+      addMessage("ai", answer);
+    }catch(error){
+      console.error(error);
+      removeTyping();
+      addMessage("ai", "Something went wrong while looking for that answer. Please try again.");
+    }finally{
+      send.disabled = false;
+      input.focus();
+    }
+  }
+
+  composer.addEventListener("submit", e => {
+    e.preventDefault();
+    ask(input.value);
+  });
+
+  input.addEventListener("keydown", e => {
+    if(e.key === "Enter" && !e.shiftKey){
+      e.preventDefault();
+      ask(input.value);
+    }
+  });
+
+  input.addEventListener("input", () => {
+    input.style.height = "auto";
+    input.style.height = Math.min(input.scrollHeight,150) + "px";
+  });
+
+  document.querySelectorAll(".suggestion").forEach(button => {
+    button.addEventListener("click", () => ask(button.textContent));
+  });
+
+  closeBtn.addEventListener("click", () => {
+    window.location.href = "index.html";
+  });
+</script>
+
+</body>
+</html>
+s

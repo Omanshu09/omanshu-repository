@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic Tac Toe</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: Inter, Arial, sans-serif;
+        background:
+            radial-gradient(circle at 20% 20%, rgba(100,120,255,.18), transparent 35%),
+            radial-gradient(circle at 80% 80%, rgba(180,80,255,.14), transparent 35%),
+            #070912;
+        color: white;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* ── CLOSE BUTTON (top‑right) ── */
+    .close-btn {
+        position: fixed;
+        top: 20px;
+        right: 24px;
+        z-index: 10;
+        width: 44px;
+        height: 44px;
+        border: 1px solid rgba(255, 255, 255, 0.20);
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        color: #fff;
+        font-size: 26px;
+        line-height: 1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s, transform 0.2s, border-color 0.2s;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+        text-decoration: none;
+    }
+    .close-btn:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: scale(1.06);
+    }
+    .close-btn:active {
+        transform: scale(0.94);
+    }
+
+    .game {
+        width: min(92vw, 440px);
+        padding: 30px;
+        border: 1px solid rgba(255,255,255,.12);
+        border-radius: 28px;
+        background: rgba(15,18,32,.72);
+        backdrop-filter: blur(22px);
+        -webkit-backdrop-filter: blur(22px);
+        box-shadow:
+            0 30px 80px rgba(0,0,0,.45),
+            inset 0 1px 0 rgba(255,255,255,.08);
+        text-align: center;
+    }
+
+    .title {
+        font-size: 30px;
+        font-weight: 700;
+        letter-spacing: -1px;
+        margin-bottom: 6px;
+    }
+
+    .subtitle {
+        font-size: 13px;
+        color: rgba(255,255,255,.55);
+        margin-bottom: 25px;
+    }
+
+    .status {
+        min-height: 26px;
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 18px;
+        color: rgba(255,255,255,.85);
+    }
+
+    .board {
+        width: 100%;
+        aspect-ratio: 1;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-rows: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .cell {
+        position: relative;
+        z-index: 3;
+        border: 1px solid rgba(255,255,255,.10);
+        border-radius: 18px;
+        background: rgba(255,255,255,.045);
+        color: white;
+        font-size: clamp(42px, 12vw, 68px);
+        font-weight: 700;
+        cursor: pointer;
+        transition:
+            transform .18s ease,
+            background .18s ease,
+            border-color .18s ease,
+            box-shadow .18s ease;
+    }
+
+    .cell:hover {
+        transform: translateY(-2px);
+        background: rgba(255,255,255,.09);
+        border-color: rgba(255,255,255,.2);
+    }
+
+    .cell.x {
+        color: #8fb3ff;
+        text-shadow: 0 0 25px rgba(100,150,255,.45);
+    }
+
+    .cell.o {
+        color: #d39aff;
+        text-shadow: 0 0 25px rgba(200,100,255,.4);
+    }
+
+    .cell.win {
+        background: rgba(255,255,255,.13);
+        border-color: rgba(255,255,255,.35);
+        box-shadow: 0 0 30px rgba(150,120,255,.25);
+        transform: scale(.97);
+    }
+
+    .controls {
+        display: flex;
+        gap: 10px;
+        margin-top: 22px;
+    }
+
+    button.action {
+        flex: 1;
+        border: 1px solid rgba(255,255,255,.12);
+        border-radius: 14px;
+        padding: 13px 16px;
+        background: rgba(255,255,255,.07);
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+        transition: .2s ease;
+    }
+
+    button.action:hover {
+        background: rgba(255,255,255,.13);
+        transform: translateY(-1px);
+    }
+
+    .score {
+        display: flex;
+        justify-content: center;
+        gap: 28px;
+        margin-top: 20px;
+        font-size: 12px;
+        color: rgba(255,255,255,.55);
+    }
+
+    .score strong {
+        display: block;
+        color: white;
+        font-size: 18px;
+        margin-top: 3px;
+    }
+
+    @media (max-width: 480px) {
+        .game {
+            padding: 22px;
+            border-radius: 22px;
+        }
+
+        .cell {
+            border-radius: 14px;
+        }
+
+        .close-btn {
+            top: 12px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            font-size: 20px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+    <!-- ─── CLOSE BUTTON ─── -->
+    <!-- No href – we close the overlay via JavaScript -->
+    <button class="close-btn" id="closeTicTacToeBtn" aria-label="Close game">✕</button>
+
+    <div class="game">
+
+        <div class="title">Tic Tac Toe</div>
+        <div class="subtitle">A quick game while you're exploring.</div>
+
+        <div class="status" id="status">Your turn — X</div>
+
+        <div class="board" id="board">
+            <button class="cell" data-index="0"></button>
+            <button class="cell" data-index="1"></button>
+            <button class="cell" data-index="2"></button>
+            <button class="cell" data-index="3"></button>
+            <button class="cell" data-index="4"></button>
+            <button class="cell" data-index="5"></button>
+            <button class="cell" data-index="6"></button>
+            <button class="cell" data-index="7"></button>
+            <button class="cell" data-index="8"></button>
+        </div>
+
+        <div class="controls">
+            <button class="action" id="restart">New Game</button>
+        </div>
+
+        <div class="score">
+            <div>
+                You
+                <strong id="playerScore">0</strong>
+            </div>
+
+            <div>
+                Draws
+                <strong id="drawScore">0</strong>
+            </div>
+
+            <div>
+                Computer
+                <strong id="computerScore">0</strong>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ─── CLOSE BUTTON: tells parent page to close the overlay ───
+        document.getElementById('closeTicTacToeBtn').addEventListener('click', function() {
+            // Access the parent window's DOM (same origin) and remove the overlay
+            const overlay = window.parent.document.getElementById('ticTacToeOverlay');
+            if (overlay) {
+                overlay.classList.remove('active');
+            } else {
+                // Fallback: if for some reason we're not in an iframe, go home
+                window.location.href = 'index.html';
+            }
+        });
+
+        // ─── GAME LOGIC ───
+        const cells = document.querySelectorAll(".cell");
+        const statusText = document.getElementById("status");
+
+        const playerScoreEl = document.getElementById("playerScore");
+        const computerScoreEl = document.getElementById("computerScore");
+        const drawScoreEl = document.getElementById("drawScore");
+
+        let board = ["", "", "", "", "", "", "", "", ""];
+        let gameOver = false;
+
+        let playerScore = 0;
+        let computerScore = 0;
+        let drawScore = 0;
+
+        const winningPatterns = [
+            [0,1,2],
+            [3,4,5],
+            [6,7,8],
+            [0,3,6],
+            [1,4,7],
+            [2,5,8],
+            [0,4,8],
+            [2,4,6]
+        ];
+
+        cells.forEach(cell => {
+            cell.addEventListener("click", () => {
+                const index = Number(cell.dataset.index);
+
+                if (board[index] !== "" || gameOver) return;
+
+                makeMove(index, "X");
+
+                const result = checkWinner();
+
+                if (result) {
+                    finishGame(result);
+                    return;
+                }
+
+                statusText.textContent = "Computer is thinking...";
+
+                setTimeout(computerMove, 350);
+            });
+        });
+
+        function makeMove(index, player) {
+            board[index] = player;
+
+            cells[index].textContent = player;
+            cells[index].classList.add(player.toLowerCase());
+        }
+
+        function computerMove() {
+            if (gameOver) return;
+
+            const available = board
+                .map((value, index) => value === "" ? index : null)
+                .filter(index => index !== null);
+
+            if (!available.length) return;
+
+            let move = findWinningMove("O");
+
+            if (move === null) {
+                move = findWinningMove("X");
+            }
+
+            if (move === null && board[4] === "") {
+                move = 4;
+            }
+
+            if (move === null) {
+                const corners = [0,2,6,8]
+                    .filter(i => board[i] === "");
+
+                if (corners.length) {
+                    move = corners[Math.floor(Math.random() * corners.length)];
+                }
+            }
+
+            if (move === null) {
+                move = available[Math.floor(Math.random() * available.length)];
+            }
+
+            makeMove(move, "O");
+
+            const result = checkWinner();
+
+            if (result) {
+                finishGame(result);
+            } else {
+                statusText.textContent = "Your turn — X";
+            }
+        }
+
+        function findWinningMove(player) {
+            for (const pattern of winningPatterns) {
+
+                const values = pattern.map(index => board[index]);
+
+                const playerCount = values.filter(v => v === player).length;
+                const emptyIndex = pattern.find(index => board[index] === "");
+
+                if (playerCount === 2 && emptyIndex !== undefined) {
+                    return emptyIndex;
+                }
+            }
+
+            return null;
+        }
+
+        function checkWinner() {
+
+            for (const pattern of winningPatterns) {
+
+                const [a,b,c] = pattern;
+
+                if (
+                    board[a] &&
+                    board[a] === board[b] &&
+                    board[a] === board[c]
+                ) {
+                    return {
+                        winner: board[a],
+                        pattern
+                    };
+                }
+            }
+
+            if (board.every(cell => cell !== "")) {
+                return {
+                    winner: "draw",
+                    pattern: []
+                };
+            }
+
+            return null;
+        }
+
+        function finishGame(result) {
+
+            gameOver = true;
+
+            if (result.winner === "draw") {
+
+                drawScore++;
+                drawScoreEl.textContent = drawScore;
+
+                statusText.textContent = "It's a draw.";
+
+                return;
+            }
+
+            result.pattern.forEach(index => {
+                cells[index].classList.add("win");
+            });
+
+            if (result.winner === "X") {
+
+                playerScore++;
+                playerScoreEl.textContent = playerScore;
+
+                statusText.textContent = "You won! 🎉";
+
+            } else {
+
+                computerScore++;
+                computerScoreEl.textContent = computerScore;
+
+                statusText.textContent = "Computer wins.";
+            }
+        }
+
+        document.getElementById("restart").addEventListener("click", newGame);
+
+        function newGame() {
+
+            board = ["", "", "", "", "", "", "", "", ""];
+
+            gameOver = false;
+
+            cells.forEach(cell => {
+                cell.textContent = "";
+                cell.classList.remove("x", "o", "win");
+            });
+
+            statusText.textContent = "Your turn — X";
+        }
+    </script>
+
+</body>
+</html>

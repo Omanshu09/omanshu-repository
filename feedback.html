@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Omanshu Bhatt — Feedback</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+    :root {
+      --bg: #0c1210;
+      --panel: #151c19;
+      --line: #33413A;
+      --text: #E9EFE8;
+      --text-faint: #8a988f;
+      --gold: #C99B4A;
+      --teal: #4FA695;
+      --display: 'Space Grotesk', sans-serif;
+      --mono: 'IBM Plex Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+      /* no scroll */
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 6vw;
+    }
+
+    /* ── CLOSE BUTTON (top‑right) ── */
+    .close-btn {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      z-index: 10;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(255, 255, 255, 0.20);
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: #fff;
+      font-size: 26px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.2s, border-color 0.2s;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+      text-decoration: none;
+    }
+    .close-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: scale(1.06);
+    }
+    .close-btn:active {
+      transform: scale(0.94);
+    }
+
+    /* ── CARD ── */
+    .card {
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      /* ensure it never overflows */
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 32px 36px 28px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+      position: relative;
+      overflow-y: auto;
+      /* just in case, but content will fit */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+    }
+    .card::-webkit-scrollbar {
+      width: 3px;
+    }
+    .card::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .card::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(201, 155, 74, 0.18), transparent 70%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    h1 {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 26px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .subhead {
+      color: var(--text-faint);
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.08em;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+    .field.required label::after {
+      content: ' *';
+      color: var(--gold);
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      background: #0f1512;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 11px 14px;
+      color: var(--text);
+      font-family: var(--display);
+      font-size: 14px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201, 155, 74, 0.15);
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+      line-height: 1.4;
+    }
+    input::placeholder,
+    textarea::placeholder {
+      color: #5b6660;
+    }
+
+    .error-text {
+      font-size: 10.5px;
+      color: #e08a6a;
+      margin-top: 4px;
+      display: none;
+    }
+    .field.invalid input,
+    .field.invalid textarea {
+      border-color: #e08a6a;
+    }
+    .field.invalid .error-text {
+      display: block;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      margin-top: 6px;
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.02em;
+      color: var(--bg);
+      background: linear-gradient(120deg, var(--gold), #e6bd77);
+      border: none;
+      border-radius: 12px;
+      padding: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 12px 30px rgba(201, 155, 74, 0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    }
+    button[type="submit"]:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 38px rgba(201, 155, 74, 0.35);
+    }
+    button[type="submit"]:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .status-line {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #e08a6a;
+      text-align: center;
+      min-height: 16px;
+    }
+
+    /* ── SUCCESS ── */
+    .success {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 16px 0 6px;
+    }
+    .success.show {
+      display: flex;
+    }
+    .success .check {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 2px solid var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      font-size: 26px;
+      color: var(--teal);
+      animation: pop 0.5s ease;
+    }
+    @keyframes pop {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      60% {
+        transform: scale(1.08);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+    .success h2 {
+      font-family: var(--display);
+      font-size: 22px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .success p {
+      color: var(--text-faint);
+      font-size: 13px;
+      max-width: 38ch;
+      line-height: 1.5;
+    }
+    .success .back-home {
+      margin-top: 20px;
+      font-family: var(--display);
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--gold);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(201, 155, 74, 0.4);
+      padding-bottom: 2px;
+      transition: border-color 0.2s ease;
+    }
+    .success .back-home:hover {
+      border-color: var(--gold);
+    }
+
+    form.hide {
+      display: none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .card {
+        padding: 24px 20px 20px;
+        max-height: 92vh;
+      }
+      h1 {
+        font-size: 22px;
+      }
+      .subhead {
+        font-size: 12px;
+        margin-bottom: 14px;
+      }
+      .field {
+        margin-bottom: 10px;
+      }
+      input,
+      textarea {
+        padding: 9px 12px;
+        font-size: 13px;
+      }
+      textarea {
+        min-height: 60px;
+      }
+      button[type="submit"] {
+        padding: 11px;
+        font-size: 14px;
+      }
+      .close-btn {
+        top: 12px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── CLOSE BUTTON (top‑right) ─── -->
+  <a class="close-btn" href="index.html" aria-label="Close feedback and return home">✕</a>
+
+  <div class="card">
+    <div class="eyebrow">Get in touch</div>
+    <h1>Send feedback</h1>
+    <p class="subhead">Spotted a bug, have an idea, or just want to say hi? This goes straight to my inbox.</p>
+
+    <form id="feedbackForm">
+      <!-- Web3Forms access key – replace with your own -->
+      <input type="hidden" name="access_key" value="2a33a25e-afbd-48f8-ae6b-299118c021a5s">
+      <input type="hidden" name="subject" value="New feedback from your portfolio site">
+      <input type="text" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+
+      <div class="field required" id="fieldName">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Your name" required>
+        <div class="error-text">Please enter your name.</div>
+      </div>
+
+      <div class="field required" id="fieldEmail">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+        <div class="error-text">Please enter a valid email.</div>
+      </div>
+
+      <div class="field" id="fieldPhone">
+        <label for="phone">Phone <span style="color:var(--text-faint); text-transform:none;">(optional)</span></label>
+        <input type="tel" id="phone" name="phone" placeholder="+91 00000 00000">
+      </div>
+
+      <div class="field required" id="fieldMessage">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="What's on your mind?" required></textarea>
+        <div class="error-text">Please write a short message.</div>
+      </div>
+
+      <button type="submit" id="submitBtn">Send feedback</button>
+      <div class="status-line" id="statusLine"></div>
+    </form>
+
+    <div class="success" id="successState">
+      <div class="check">✓</div>
+      <h2>Thank you for your feedback</h2>
+      <p>It's on its way to Omanshu's inbox — genuinely appreciated, and it won't go unread.</p>
+      <a class="back-home" href="index.html">← Back to homepage</a>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('feedbackForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusLine = document.getElementById('statusLine');
+    const successState = document.getElementById('successState');
+
+    const fields = [
+      { id: 'fieldName', input: 'name', validate: v => v.trim().length > 0 },
+      { id: 'fieldEmail', input: 'email', validate: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+      { id: 'fieldMessage', input: 'message', validate: v => v.trim().length > 0 }
+    ];
+
+    function validate() {
+      let ok = true;
+      fields.forEach(f => {
+        const el = document.getElementById(f.input);
+        const wrap = document.getElementById(f.id);
+        const valid = f.validate(el.value);
+        wrap.classList.toggle('invalid', !valid);
+        if (!valid) ok = false;
+      });
+      return ok;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      statusLine.textContent = '';
+
+      if (!validate()) {
+        statusLine.textContent = 'Please fix the highlighted fields.';
+        return;
+      }
+
+      const accessKey = form.access_key.value;
+      if (!accessKey || accessKey === 'YOUR_WEB3FORMS_ACCESS_KEY_HERE') {
+        statusLine.textContent = 'Form isn\'t connected yet — see setup notes in the file.';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(form)))
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          form.classList.add('hide');
+          successState.classList.add('show');
+        } else {
+          statusLine.textContent = 'Something went wrong — please try again in a moment.';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Send feedback';
+        }
+      } catch (err) {
+        statusLine.textContent = 'Network error — check your connection and try again.';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send feedback';
+      }
+    });
+  </script>
+
+</body>
+</html>
