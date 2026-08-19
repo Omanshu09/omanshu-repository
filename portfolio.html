@@ -1270,14 +1270,14 @@
               <div><div class="exp-org">Indian Oil Corporation Limited (IOCL)</div></div>
               <div>
                 <div class="exp-role">Trainee Intern</div>
-                <div class="exp-desc">Supported technical and organizational tasks within a large-scale public sector engineering environment, gaining exposure to professional workflows and cross-team coordination.</div>
+                <div class="exp-desc">Supported technical and organizational tasks within a large-scale public sector engineering environment, gaining exposure to professional workflows and cross-team coordination. Supported data analysis initiatives for operational efficiency improvements. </div>
               </div>
             </div>
             <div class="exp-item">
               <div><div class="exp-org">Kodacy</div></div>
               <div>
                 <div class="exp-role">Virtual Intern — AI/ML & Robotics</div>
-                <div class="exp-desc">Completed two virtual internship tracks covering AI/ML fundamentals, data analysis, and robotics/automation concepts.</div>
+                <div class="exp-desc">Completed two virtual internship tracks covering AI/ML fundamentals, data analysis, and robotics/automation concepts. Developed robotics simulation prototypes using Python and relevant frameworks</div>
               </div>
             </div>
           </div>
@@ -1299,9 +1299,12 @@
                 <!-- Project 1: clickable title -->
                 <a href="https://github.com/Omanshu09/AI-codebase-intlligence" target="_blank" rel="noopener noreferrer" class="proj-name" style="text-decoration:none; color:inherit; display:block;">AI Codebase Intelligence Platform</a>
                 <ul class="proj-desc">
-                  <li>Built an AI-powered platform that ingests GitHub repositories and enables natural-language querying across source code.</li>
-                  <li>Implemented RAG with code embeddings and vector search to retrieve relevant files and functions before generating LLM responses.</li>
-                  <li>Developed FastAPI services for ingestion, processing, retrieval, and inference, paired with a React interface and automated CI testing.</li>
+                  <li>Problem: Development teams often struggle to onboard new engineers or navigate legacy codebases. Traditional search (grep) lacks semantic understanding, requiring developers to know exactly what they are looking for. I built, an AI powered platform, allowing engineers to ask high level questions and receive context aware answers.</li>
+                  <li>Implementation: Implemented a RAG pipeline, chunked source files into code segments, generated embeddings, used a vector database to retrieve relevant files/functions and passed that context to an LLM for response generation.</li>
+                  <li>Developed FastAPI services to handle repository ingestion, processing, retrieval and inference. Containerized the services with Docker.</li>
+                  <li>Tested across 1,500+ source code files; retrieval recall for relevant files was roughly 75%.</li>
+                
+
                 </ul>
                 <!-- new cool GitHub link right beneath the description -->
                 <a href="https://github.com/Omanshu09/AI-codebase-intlligence" target="_blank" rel="noopener noreferrer" class="proj-github-link">→ View on GitHub</a>
@@ -1314,8 +1317,9 @@
                 <!-- Project 2: clickable title -->
                 <a href="https://github.com/Omanshu09/Deepfake-image-integrity-system" target="_blank" rel="noopener noreferrer" class="proj-name" style="text-decoration:none; color:inherit; display:block;">Deepfake Image Integrity System</a>
                 <ul class="proj-desc">
-                  <li>Built an end-to-end deepfake detection system spanning a mobile app and a browser extension, backed by a shared inference server.</li>
-                  <li>Applied EfficientNet-B0 for lightweight on-device detection and a Vision Transformer for higher-accuracy analysis of web and social images.</li>
+                  <li>Problem: With the rise of generative AI, distinguishing between real and synthetic images is critical for combating misinformation. Users need accessible tools that work across different platforms, social media (web) and native cameras (mobile).</li>
+                  <li>Implementation: I built a shared ML Inference Pipeline using PyTorch that standardizes preprocessing and prediction outputs. I deployed this pipeline behind a REST API, which powers both the React Native Mobile App and a Browser Extension.</li>
+                  <li>I curated a balanced dataset of 5,000+ images consisting of real photographs and AI generated samples. After extensive hyperparameter tuning and data augmentation, it acheived ~80% test accuracy.<li></li>
                 </ul>
                 <!-- new cool GitHub link right beneath the description -->
                 <a href="https://github.com/Omanshu09/Deepfake-image-integrity-system" target="_blank" rel="noopener noreferrer" class="proj-github-link">→ View on GitHub</a>
