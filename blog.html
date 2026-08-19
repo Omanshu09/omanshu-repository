@@ -99,7 +99,7 @@
             top: 0;
             z-index: 30;
             padding: 18px 6vw;
-            background: rgba(23, 31, 27, 0.86);
+            background: transparent;
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             border-bottom: 1px solid var(--line);
@@ -343,12 +343,13 @@
             position: fixed;
             inset: 0;
             z-index: 200;
-            background: var(--bg);
+            background: rgba(8, 10, 12, 0.97);
             overflow-y: auto;
             opacity: 0;
             visibility: hidden;
             transform: translateY(16px);
             transition: opacity .35s ease, transform .35s ease, visibility .35s ease;
+            padding: 32px 6vw;
         }
         .article-detail.open {
             opacity: 1;
@@ -359,14 +360,13 @@
             position: sticky;
             top: 0;
             z-index: 5;
+            width: min(900px, 100%);
+            margin: 0 auto;
             display: flex;
             justify-content: flex-end;
             align-items: center;
             padding: 22px 6vw;
-            background: rgba(23, 31, 27, 0.92);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border-bottom: 1px solid var(--line);
+            background: transparent;
         }
         .close-btn {
             width: 40px;
@@ -389,9 +389,10 @@
         }
 
         .detail-body {
-            max-width: 760px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 48px 6vw 100px;
+            background: transparent;
         }
         .detail-body .tag {
             font-family: var(--mono);
@@ -429,7 +430,7 @@
             aspect-ratio: 4/3;
             border-radius: 10px;
             overflow: hidden;
-            background: #212C25;
+            background: #1B2023;
             border: 1px solid var(--line);
             display: flex;
             align-items: center;
@@ -492,6 +493,35 @@
     </style>
 </head>
 <body>
+    <!-- BLOG BACKGROUND VIDEO -->
+<video
+    id="blogBackgroundVideo"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    aria-hidden="true"
+>
+    <source src="background-blog.mp4" type="video/mp4">
+</video>
+
+<style>
+    #blogBackgroundVideo {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -10;
+        pointer-events: none;
+        background: #171F1B;
+    }
+
+    body {
+        background: transparent !important;
+    }
+</style>
 
     <!-- ===================== HEADER ===================== -->
     <header class="blog-header">
@@ -1327,6 +1357,9 @@
             ]
         }];
 
+        const REMOVED_ARTICLE_IDS = new Set([16, 18, 19, 20, 21, 22, 24, 27, 28, 35, 39, 42, 43, 44, 45, 46, 47, 48, 49, 50]);
+        ARTICLES.splice(0, ARTICLES.length, ...ARTICLES.filter(article => !REMOVED_ARTICLE_IDS.has(article.id)));
+
         // ================================================================
         //  STATE
         // ================================================================
@@ -1535,4 +1568,409 @@
         renderList();
     </script>
 </body>
+<script>
+(() => {
+
+    const canvas = document.createElement("canvas");
+    canvas.id = "gestureCanvas";
+
+    canvas.style.cssText = `
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+        background: transparent;
+    `;
+
+    document.body.appendChild(canvas);
+
+    const ctx = canvas.getContext("2d");
+
+    let width = 0;
+    let height = 0;
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    const pointer = {
+        x: -1000,
+        y: -1000,
+        lastX: -1000,
+        lastY: -1000,
+        active: false
+    };
+
+    let particles = [];
+
+    const CONNECTION_DISTANCE = 130;
+
+    class Particle {
+
+        constructor() {
+
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+
+            this.vx = (Math.random() - 0.5) * 0.25;
+            this.vy = (Math.random() - 0.5) * 0.25;
+
+            this.size = 0.7 + Math.random() * 1.4;
+            this.phase = Math.random() * Math.PI * 2;
+        }
+
+        update() {
+
+            this.vx +=
+                Math.sin(
+                    performance.now() * 0.0005 +
+                    this.phase
+                ) * 0.0004;
+
+            this.vy +=
+                Math.cos(
+                    performance.now() * 0.0004 +
+                    this.phase
+                ) * 0.0004;
+
+            if (pointer.active) {
+
+                const dx = pointer.x - this.x;
+                const dy = pointer.y - this.y;
+
+                const distance =
+                    Math.sqrt(dx * dx + dy * dy);
+
+                const radius = 190;
+
+                if (distance < radius && distance > 1) {
+
+                    const strength =
+                        1 - distance / radius;
+
+                    this.vx -=
+                        (dx / distance) *
+                        strength *
+                        0.035;
+
+                    this.vy -=
+                        (dy / distance) *
+                        strength *
+                        0.035;
+
+                    this.vx +=
+                        (pointer.x - pointer.lastX) *
+                        strength *
+                        0.008;
+
+                    this.vy +=
+                        (pointer.y - pointer.lastY) *
+                        strength *
+                        0.008;
+                }
+            }
+
+            this.vx *= 0.94;
+            this.vy *= 0.94;
+
+            this.x += this.vx;
+            this.y += this.vy;
+
+            if (this.x < -20) this.x = width + 20;
+            if (this.x > width + 20) this.x = -20;
+
+            if (this.y < -20) this.y = height + 20;
+            if (this.y > height + 20) this.y = -20;
+        }
+
+        draw() {
+
+            let opacity = 0.22;
+
+            if (pointer.active) {
+
+                const distance =
+                    Math.hypot(
+                        pointer.x - this.x,
+                        pointer.y - this.y
+                    );
+
+                if (distance < 190) {
+
+                    opacity =
+                        0.22 +
+                        (1 - distance / 190) *
+                        0.5;
+                }
+            }
+
+            ctx.beginPath();
+
+            ctx.arc(
+                this.x,
+                this.y,
+                this.size,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fillStyle =
+                `rgba(79,166,149,${opacity})`;
+
+            ctx.fill();
+        }
+    }
+
+    function resize() {
+
+        width = window.innerWidth;
+        height = window.innerHeight;
+
+        dpr =
+            Math.min(
+                window.devicePixelRatio || 1,
+                2
+            );
+
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+
+        ctx.setTransform(
+            dpr,
+            0,
+            0,
+            dpr,
+            0,
+            0
+        );
+
+        particles = [];
+
+        const count =
+            width < 700 ? 45 : 100;
+
+        for (let i = 0; i < count; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function drawConnections() {
+
+        for (let i = 0; i < particles.length; i++) {
+
+            for (let j = i + 1; j < particles.length; j++) {
+
+                const a = particles[i];
+                const b = particles[j];
+
+                const distance =
+                    Math.hypot(
+                        a.x - b.x,
+                        a.y - b.y
+                    );
+
+                if (distance < CONNECTION_DISTANCE) {
+
+                    let opacity =
+                        1 -
+                        distance /
+                        CONNECTION_DISTANCE;
+
+                    if (pointer.active) {
+
+                        const da =
+                            Math.hypot(
+                                pointer.x - a.x,
+                                pointer.y - a.y
+                            );
+
+                        const db =
+                            Math.hypot(
+                                pointer.x - b.x,
+                                pointer.y - b.y
+                            );
+
+                        const influence =
+                            Math.max(
+                                0,
+                                1 -
+                                Math.min(da, db) / 200
+                            );
+
+                        opacity +=
+                            influence * 0.35;
+                    }
+
+                    opacity =
+                        Math.min(
+                            opacity,
+                            0.35
+                        );
+
+                    ctx.beginPath();
+
+                    ctx.moveTo(a.x, a.y);
+                    ctx.lineTo(b.x, b.y);
+
+                    ctx.strokeStyle =
+                        `rgba(79,166,149,${opacity * 0.45})`;
+
+                    ctx.lineWidth = 0.6;
+
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+
+    function drawCursorGlow() {
+
+        if (!pointer.active) return;
+
+        const gradient =
+            ctx.createRadialGradient(
+                pointer.x,
+                pointer.y,
+                0,
+                pointer.x,
+                pointer.y,
+                190
+            );
+
+        gradient.addColorStop(
+            0,
+            "rgba(201,155,74,0.10)"
+        );
+
+        gradient.addColorStop(
+            0.35,
+            "rgba(79,166,149,0.045)"
+        );
+
+        gradient.addColorStop(
+            1,
+            "rgba(79,166,149,0)"
+        );
+
+        ctx.fillStyle = gradient;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            pointer.x,
+            pointer.y,
+            190,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+    }
+
+    function animate() {
+
+        ctx.clearRect(
+            0,
+            0,
+            width,
+            height
+        );
+
+        drawCursorGlow();
+
+        for (const particle of particles) {
+            particle.update();
+        }
+
+        drawConnections();
+
+        for (const particle of particles) {
+            particle.draw();
+        }
+
+        pointer.lastX +=
+            (pointer.x - pointer.lastX) * 0.15;
+
+        pointer.lastY +=
+            (pointer.y - pointer.lastY) * 0.15;
+
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener(
+        "mousemove",
+        (e) => {
+
+            pointer.lastX = pointer.x;
+            pointer.lastY = pointer.y;
+
+            pointer.x = e.clientX;
+            pointer.y = e.clientY;
+
+            pointer.active = true;
+        }
+    );
+
+    window.addEventListener(
+        "mouseleave",
+        () => {
+            pointer.active = false;
+        }
+    );
+
+    window.addEventListener(
+        "touchstart",
+        (e) => {
+
+            const touch = e.touches[0];
+
+            if (!touch) return;
+
+            pointer.x = touch.clientX;
+            pointer.y = touch.clientY;
+
+            pointer.lastX = pointer.x;
+            pointer.lastY = pointer.y;
+
+            pointer.active = true;
+        },
+        { passive: true }
+    );
+
+    window.addEventListener(
+        "touchmove",
+        (e) => {
+
+            const touch = e.touches[0];
+
+            if (!touch) return;
+
+            pointer.lastX = pointer.x;
+            pointer.lastY = pointer.y;
+
+            pointer.x = touch.clientX;
+            pointer.y = touch.clientY;
+
+            pointer.active = true;
+        },
+        { passive: true }
+    );
+
+    window.addEventListener(
+        "touchend",
+        () => {
+            pointer.active = false;
+        },
+        { passive: true }
+    );
+
+    window.addEventListener(
+        "resize",
+        resize
+    );
+
+    resize();
+    animate();
+
+})();
+</script>
 </html>
