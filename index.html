@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background:#171F1B;">
 <head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Omanshu Bhatt</title>
+  <!-- inline, non-blocking: paints the dark background instantly, before
+       the font-awesome / Google Fonts requests below have a chance to
+       delay first paint — this is what removes the white flash on load
+       and when navigating back from the globe page. -->
+  <style>html,body{background:#171F1B;}</style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
@@ -53,7 +58,9 @@
       position:fixed; top:0; left:0; right:0; z-index:50;
       display:flex; justify-content:space-between; align-items:center;
       padding:28px 5vw;
+      pointer-events:none;
     }
+    .topbar a, .topbar button{ pointer-events:auto; }
     .topbar .name-link{
       font-family:var(--display); font-weight:700; font-size:38px;
       letter-spacing:0.02em; color:#fff; text-decoration:none;
@@ -68,7 +75,7 @@
     .topbar .name-block{ display:flex; flex-direction:column; }
     .topbar .cta{
       font-family:var(--display); font-weight:600; font-size:16px; letter-spacing:0.04em;
-      color:var(--bg); text-decoration:none; margin-top:10px;
+      color:var(--bg); text-decoration:none; margin-top:10px; margin-left:0; align-self:center;
       display:inline-flex; align-items:center; gap:8px;
       padding:12px 22px; border-radius:30px; width:fit-content;
       background:linear-gradient(135deg, var(--gold), #e6bd77);
@@ -135,16 +142,16 @@
     .mode-toggle button{
       background:none; border:none; cursor:pointer;
       font-family:inherit; font-size:15px; letter-spacing:0.02em;
-      color:#000; padding:4px 2px; position:relative;
+      color:#fff; padding:4px 2px; position:relative;
       transition:color .3s ease;
     }
     .mode-toggle button::after{
       content:''; position:absolute; left:0; right:100%; bottom:-2px; height:1px;
-      background:#000; transition:right .3s ease;
+      background:#fff; transition:right .3s ease;
     }
-    .mode-toggle button.active{ color:#000; }
+    .mode-toggle button.active{ color:#fff; }
     .mode-toggle button.active::after{ right:0; }
-    .mode-toggle button:hover{ color:#000; }
+    .mode-toggle button:hover{ color:#fff; }
     body.lightbox-open .mode-toggle,
     body.lightbox-open #globeLauncher,
     body.lightbox-open #ticTacToeLauncher,
@@ -343,6 +350,95 @@
       font-family:var(--mono); font-size:13px; color:var(--text-faint);
       background:#212C25;
     }
+
+    /* ---- lightbox: image + tap-to-download + caption beneath ---- */
+    .lightbox-content{
+      flex-direction:column;
+      gap:16px;
+    }
+    .lightbox-media{
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      max-width:100%;
+    }
+    .lightbox-media img{
+      max-width:100%; max-height:70vh; border-radius:8px;
+      box-shadow:0 30px 80px rgba(0,0,0,0.5);
+      display:block;
+    }
+    .lightbox-download{
+      position:absolute; top:12px; right:12px;
+      width:40px; height:40px; border-radius:50%;
+      background:rgba(10,14,12,0.75);
+      border:1px solid var(--line);
+      color:var(--text);
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; font-size:16px;
+      transition:border-color .2s ease, color .2s ease, transform .2s ease;
+      backdrop-filter:blur(6px);
+    }
+    .lightbox-download:hover{ border-color:var(--gold); color:var(--gold); transform:translateY(-1px); }
+
+    .lightbox-caption{
+      text-align:center;
+      max-width:min(80vw, 640px);
+      padding:0 12px;
+    }
+    .lightbox-caption .lightbox-title{
+      font-family:var(--display); font-weight:700;
+      font-size:22px; letter-spacing:0.01em;
+      color:var(--text); margin-bottom:8px;
+    }
+    .lightbox-caption .lightbox-desc{
+      font-family:var(--mono); font-size:13px; line-height:1.6;
+      color:var(--text-dim);
+    }
+    @media (max-width:700px){
+      .lightbox-caption .lightbox-title{ font-size:18px; }
+      .lightbox-caption .lightbox-desc{ font-size:12px; line-height:1.55; }
+      .lightbox-media img{ max-height:55vh; }
+    }
+    @media (max-width:420px){
+      .lightbox-caption .lightbox-title{ font-size:16px; }
+      .lightbox-caption .lightbox-desc{ font-size:11.5px; }
+      .lightbox-download{ width:36px; height:36px; font-size:14px; }
+    }
+
+    /* ---- download confirm dialog ---- */
+    .download-confirm-overlay{
+      position:fixed; inset:0; z-index:220;
+      background:rgba(10,14,12,0.6);
+      display:flex; align-items:center; justify-content:center;
+      opacity:0; pointer-events:none;
+      transition:opacity .25s ease;
+    }
+    .download-confirm-overlay.open{ opacity:1; pointer-events:auto; }
+    .download-confirm-box{
+      background:var(--bg); border:1px solid var(--line); border-radius:10px;
+      padding:22px 26px; max-width:320px; text-align:center;
+      font-family:var(--mono);
+      box-shadow:0 20px 60px rgba(0,0,0,0.5);
+    }
+    .download-confirm-box p{
+      font-size:13px; color:var(--text); margin-bottom:18px; line-height:1.5;
+    }
+    .download-confirm-actions{
+      display:flex; gap:12px; justify-content:center;
+    }
+    .download-confirm-actions button{
+      font-family:var(--display); font-weight:600; font-size:13px;
+      padding:9px 18px; border-radius:24px; cursor:pointer;
+      border:1px solid var(--line); background:none; color:var(--text);
+      transition:border-color .2s ease, color .2s ease, transform .2s ease;
+    }
+    .download-confirm-actions button:hover{ transform:translateY(-1px); }
+    .download-confirm-actions .confirm-yes{
+      background:linear-gradient(135deg, var(--gold), #e6bd77);
+      color:var(--bg); border:none;
+    }
+    .download-confirm-actions .confirm-no:hover{ border-color:var(--gold); color:var(--gold); }
     /* Contact button (top-right) */
 .contact-btn {
   background: none;
@@ -510,56 +606,72 @@
         <!-- SLOT 1 -->
         <div class="orbit-item" style="--angle:0deg;">
           <div class="orbit-img">
-            <img src="image1.jpg" alt="Project 1">
+            <img src="image1.jpg" alt="Earth to the Moon"
+                 data-title="Earth to the Moon"
+                 data-desc="A marvel of human science and exploration. From Earth to the Moon, humanity turned imagination into reality.">
           </div>
         </div>
 
         <!-- SLOT 2 -->
         <div class="orbit-item" style="--angle:45deg;">
           <div class="orbit-img">
-            <img src="image2.jpg" alt="Project 1">
+            <img src="image2.jpg" alt="Porsche 911"
+                 data-title="Porsche 911"
+                 data-desc="A timeless icon of automotive engineering. The classic Porsche 911 blends elegant design with unmistakable performance.">
           </div>
         </div>
 
         <!-- SLOT 3 -->
         <div class="orbit-item" style="--angle:90deg;">
           <div class="orbit-img">
-            <img src="image3.jpg" alt="Project 1">
+            <img src="image3.jpg" alt="Milky Way Observatory"
+                 data-title="Milky Way Observatory"
+                 data-desc="A window into the vastness of our universe. Observatories allow us to study the Milky Way and the countless worlds within it.">
           </div>
         </div>
 
         <!-- SLOT 4 -->
         <div class="orbit-item" style="--angle:135deg;">
           <div class="orbit-img">
-            <img src="image4.jpg" alt="Project 1">
+            <img src="image4.jpg" alt="Napoleon's Tomb, Paris"
+                 data-title="Napoleon's Tomb, Paris"
+                 data-desc="The final resting place of Napoleon Bonaparte, at Les Invalides in Paris — one of history's most influential military leaders.">
           </div>
         </div>
 
         <!-- SLOT 5 -->
         <div class="orbit-item" style="--angle:180deg;">
           <div class="orbit-img">
-            <img src="image5.jpg" alt="Project 1">
+            <img src="image5.jpg" alt="Deep Sea Exploration"
+                 data-title="Deep Sea Exploration"
+                 data-desc="Exploring a world hidden beneath the ocean surface. Deep sea missions help scientists study mysterious ecosystems and unknown terrain.">
           </div>
         </div>
 
         <!-- SLOT 6 -->
         <div class="orbit-item" style="--angle:225deg;">
           <div class="orbit-img">
-            <img src="image6.jpg" alt="Project 1">
+            <img src="image6.jpg" alt="Millau Viaduct, France"
+                 data-title="Millau Viaduct, France"
+                 data-desc="One of the world's most remarkable feats of modern engineering. It stretches across the Tarn Valley in southern France — a perfect meeting of engineering, architecture, and nature.">
           </div>
         </div>
 
         <!-- SLOT 7 -->
         <div class="orbit-item" style="--angle:270deg;">
           <div class="orbit-img">
-            <img src="image7.jpg" alt="Project 1">
+            <img src="image7.jpg" alt="Leica Camera"
+                 data-title="Leica Camera"
+                 data-desc="A symbol of precision, craftsmanship, and photographic history. Leica cameras helped redefine how photographers capture the world.">
           </div>
         </div>
 
         <!-- SLOT 8 -->
         <div class="orbit-item" style="--angle:315deg;">
           <div class="orbit-img">
-            <img src="image8.jpg" alt="Project 1">
+            <img src="image8.jpg" alt="Sverd i fjell, Norway"
+                 data-title="Sverd i fjell, Norway"
+                 data-desc="Three enormous swords rise from the rocks overlooking Hafrsfjord, Norway. The monument commemorates the Battle of Hafrsfjord and the unification of Norway.">
           </div>
         </div>
 
@@ -573,6 +685,17 @@
     <div class="lightbox" id="lightbox">
       <button class="lightbox-back" id="lightboxBack">← Back</button>
       <div class="lightbox-content" id="lightboxContent"></div>
+    </div>
+
+    <!-- ===================== DOWNLOAD CONFIRM ===================== -->
+    <div class="download-confirm-overlay" id="downloadConfirmOverlay">
+      <div class="download-confirm-box">
+        <p>Download this image?</p>
+        <div class="download-confirm-actions">
+          <button class="confirm-yes" id="confirmDownloadYes">Yes</button>
+          <button class="confirm-no" id="confirmDownloadNo">No</button>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -618,6 +741,9 @@
         stage.appendChild(clone);
         tier.el = clone;
         tier.items = Array.from(clone.querySelectorAll('.orbit-item'));
+      });
+      TIERS.forEach(tier=>{
+        tier.el.style.zIndex = tier.name === 'top' ? 60 : tier.name === 'mid' ? 2 : 1;
       });
 
       let mode = 'rings';
@@ -688,15 +814,62 @@
       const lightbox = document.getElementById('lightbox');
       const lightboxContent = document.getElementById('lightboxContent');
       const lightboxBack = document.getElementById('lightboxBack');
+      const downloadConfirmOverlay = document.getElementById('downloadConfirmOverlay');
+      const confirmDownloadYes = document.getElementById('confirmDownloadYes');
+      const confirmDownloadNo = document.getElementById('confirmDownloadNo');
+      let pendingDownloadUrl = '';
+      let pendingDownloadName = 'image';
 
       function openLightbox(orbitImgEl){
         const realImg = orbitImgEl.querySelector('img');
         lightboxContent.innerHTML = '';
         if(realImg){
+          // image + tap-to-reveal download icon
+          const media = document.createElement('div');
+          media.className = 'lightbox-media';
+
           const bigImg = document.createElement('img');
           bigImg.src = realImg.getAttribute('src');
           bigImg.alt = realImg.getAttribute('alt') || '';
-          lightboxContent.appendChild(bigImg);
+          media.appendChild(bigImg);
+
+          const dlBtn = document.createElement('button');
+          dlBtn.className = 'lightbox-download';
+          dlBtn.type = 'button';
+          dlBtn.setAttribute('aria-label', 'Download image');
+          dlBtn.innerHTML = '<i class="fa-solid fa-download"></i>';
+          media.appendChild(dlBtn);
+
+          dlBtn.addEventListener('click', (e)=>{
+            e.stopPropagation();
+            pendingDownloadUrl = bigImg.src;
+            const rawName = realImg.dataset.title || realImg.getAttribute('alt') || 'image';
+            pendingDownloadName = rawName.replace(/[^a-z0-9\- ]/gi, '').trim().replace(/\s+/g, '-').toLowerCase() || 'image';
+            downloadConfirmOverlay.classList.add('open');
+          });
+
+          lightboxContent.appendChild(media);
+
+          // heading + description below the image
+          const title = realImg.dataset.title || '';
+          const desc = realImg.dataset.desc || '';
+          if(title || desc){
+            const caption = document.createElement('div');
+            caption.className = 'lightbox-caption';
+            if(title){
+              const h = document.createElement('div');
+              h.className = 'lightbox-title';
+              h.textContent = title;
+              caption.appendChild(h);
+            }
+            if(desc){
+              const p = document.createElement('div');
+              p.className = 'lightbox-desc';
+              p.textContent = desc;
+              caption.appendChild(p);
+            }
+            lightboxContent.appendChild(caption);
+          }
         } else {
           const label = orbitImgEl.querySelector('.placeholder-label');
           const box = document.createElement('div');
@@ -714,6 +887,7 @@
       function closeLightbox(){
         lightbox.classList.remove('open');
         document.body.classList.remove('lightbox-open');
+        downloadConfirmOverlay.classList.remove('open');
         paused = false;
         document.body.style.overflow = '';
       }
@@ -726,6 +900,25 @@
       lightboxBack.addEventListener('click', closeLightbox);
       lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox) closeLightbox(); });
       document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeLightbox(); });
+
+      /* ---- download confirm: "yes" downloads the file, "no" cancels ---- */
+      confirmDownloadYes.addEventListener('click', ()=>{
+        if(pendingDownloadUrl){
+          const a = document.createElement('a');
+          a.href = pendingDownloadUrl;
+          a.download = pendingDownloadName;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        }
+        downloadConfirmOverlay.classList.remove('open');
+      });
+      confirmDownloadNo.addEventListener('click', ()=>{
+        downloadConfirmOverlay.classList.remove('open');
+      });
+      downloadConfirmOverlay.addEventListener('click', (e)=>{
+        if(e.target === downloadConfirmOverlay) downloadConfirmOverlay.classList.remove('open');
+      });
 
     </script>
 
