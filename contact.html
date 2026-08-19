@@ -1,162 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contact</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact</title>
 
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      background: transparent;
-      font-family: 'IBM Plex Mono', monospace;
-      color: #E9EFE8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
+        body {
+            background: transparent;
+            font-family: 'IBM Plex Mono', monospace;
+            color: #E9EFE8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-    .contact-card {
-      width: 100%;
-      max-width: 420px;
-      background: rgba(18, 24, 20, 0.88);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 28px;
-      padding: 40px 32px 36px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-      text-align: center;
-      position: relative;
-    }
+        .contact-card {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(18, 24, 20, 0.88);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 28px;
+            padding: 40px 32px 36px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            position: relative;
+        }
 
-    .contact-card h2 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 600;
-      font-size: 28px;
-      letter-spacing: -0.01em;
-      margin-bottom: 24px;
-      color: #F5F7FA;
-    }
+        .contact-card h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 28px;
+            letter-spacing: -0.01em;
+            margin-bottom: 24px;
+            color: #F5F7FA;
+        }
 
-    .contact-item {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      padding: 14px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      font-size: 15px;
-      color: #A7B0C0;
-      transition: color 0.2s, padding-left 0.2s;
-    }
-    .contact-item:last-of-type {
-      border-bottom: none;
-    }
-    .contact-item:hover {
-      color: #F5F7FA;
-      padding-left: 6px;
-    }
-    .contact-item i {
-      width: 28px;
-      font-size: 20px;
-      color: #C99B4A;
-      text-align: center;
-    }
-    .contact-item a {
-      color: inherit;
-      text-decoration: none;
-      flex: 1;
-      text-align: left;
-    }
-    .contact-item a:hover {
-      color: #C99B4A;
-    }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 15px;
+            color: #A7B0C0;
+            transition: color 0.2s, padding-left 0.2s;
+        }
+        .contact-item:last-of-type {
+            border-bottom: none;
+        }
+        .contact-item:hover {
+            color: #F5F7FA;
+            padding-left: 6px;
+        }
+        .contact-item i {
+            width: 28px;
+            font-size: 20px;
+            color: #C99B4A;
+            text-align: center;
+        }
+        .contact-item a {
+            color: inherit;
+            text-decoration: none;
+            flex: 1;
+            text-align: left;
+        }
+        .contact-item a:hover {
+            color: #C99B4A;
+        }
 
-    .social-row {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      margin-top: 28px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .social-row a {
-      color: #A7B0C0;
-      font-size: 28px;
-      transition: color 0.2s, transform 0.2s;
-    }
-    .social-row a:hover {
-      color: #C99B4A;
-      transform: translateY(-4px);
-    }
+        .social-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .social-row a {
+            color: #A7B0C0;
+            font-size: 28px;
+            transition: color 0.2s, transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+        .social-row a:hover {
+            color: #C99B4A;
+            transform: translateY(-4px);
+        }
 
-    .footer-note {
-      margin-top: 22px;
-      font-size: 11px;
-      color: #6D7C72;
-      letter-spacing: 0.06em;
-    }
+        /* ----- CodeWars custom badge (replaces missing Font Awesome icon) ----- */
+        .cw-badge {
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: -0.02em;
+            border: 2px solid currentColor;
+            border-radius: 6px;
+            padding: 0 7px;
+            line-height: 1.7;
+            display: inline-block;
+            transition: color 0.2s, border-color 0.2s, transform 0.2s;
+            /* inherit color from parent <a> */
+            color: inherit;
+        }
 
-    /* responsiveness */
-    @media (max-width: 500px) {
-      .contact-card {
-        padding: 28px 18px 24px;
-      }
-      .contact-item {
-        font-size: 13px;
-        gap: 12px;
-      }
-      .contact-item i {
-        font-size: 18px;
-        width: 24px;
-      }
-      .social-row a {
-        font-size: 24px;
-      }
-    }
-  </style>
+        /* Hover effect for the badge (matches other icons) */
+        .social-row a:hover .cw-badge {
+            color: #C99B4A;
+            border-color: #C99B4A;
+            transform: translateY(-4px);
+        }
+
+        /* Ensure the badge doesn't shift during hover */
+        .social-row a.cw-link {
+            font-size: 0;
+            /* remove inherited font-size so we control it via .cw-badge */
+        }
+
+        .footer-note {
+            margin-top: 22px;
+            font-size: 11px;
+            color: #6D7C72;
+            letter-spacing: 0.06em;
+        }
+
+        /* ----- responsiveness ----- */
+        @media (max-width: 500px) {
+            .contact-card {
+                padding: 28px 18px 24px;
+            }
+            .contact-item {
+                font-size: 13px;
+                gap: 12px;
+            }
+            .contact-item i {
+                font-size: 18px;
+                width: 24px;
+            }
+            .social-row {
+                gap: 18px;
+            }
+            .social-row a {
+                font-size: 24px;
+            }
+            .cw-badge {
+                font-size: 13px;
+                padding: 0 6px;
+                line-height: 1.6;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="contact-card">
-    <h2>📬 Contact</h2>
+    <div class="contact-card">
+        <h2>📬 Contact</h2>
 
-    <!-- Email -->
-    <div class="contact-item">
-      <i class="fas fa-envelope"></i>
-      <a href="mailto:omanshu25@gmail.com">omanshu25@gmail.com</a>
+        <!-- Email -->
+        <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <a href="mailto:omanshu25@gmail.com">omanshu25@gmail.com</a>
+        </div>
+
+        <!-- Phone -->
+        <div class="contact-item">
+            <i class="fas fa-phone-alt"></i>
+            <a href="tel:+918755118493">+91 87551 18493</a>
+        </div>
+
+        <!-- Social links -->
+        <div class="social-row">
+            <!-- Instagram -->
+            <a href="https://www.instagram.com/omanshubhatt/" target="_blank" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <!-- Snapchat -->
+            <a href="https://www.snapchat.com/add/omanshu_bhatt" target="_blank" aria-label="Snapchat">
+                <i class="fab fa-snapchat-ghost"></i>
+            </a>
+            <!-- GitHub -->
+            <a href="https://github.com/Omanshu09" target="_blank" aria-label="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+            <!-- CodeWars (custom badge) -->
+            <a href="https://www.codewars.com/users/Omanshu" target="_blank" aria-label="CodeWars" class="cw-link">
+                <span class="cw-badge">CW</span>
+            </a>
+        </div>
+
+        <div class="footer-note">— always open for a chat —</div>
     </div>
-
-    <!-- Phone -->
-    <div class="contact-item">
-      <i class="fas fa-phone-alt"></i>
-      <a href="tel:+918755118493">+91 87551 18493</a>
-    </div>
-
-    <!-- Social links -->
-    <div class="social-row">
-      <a href="https://www.instagram.com/omanshubhatt/" target="_blank" aria-label="Instagram">
-        <i class="fab fa-instagram"></i>
-      </a>
-      <a href="https://www.snapchat.com/add/omanshu_bhatt" target="_blank" aria-label="Snapchat">
-        <i class="fab fa-snapchat-ghost"></i>
-      </a>
-      <a href="https://github.com/Omanshu09" target="_blank" aria-label="GitHub">
-        <i class="fab fa-github"></i>
-      </a>
-      <!-- you can add more if you like -->
-    </div>
-
-    <div class="footer-note">— always open for a chat —</div>
-  </div>
 </body>
 </html>
