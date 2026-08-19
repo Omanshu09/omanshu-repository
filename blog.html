@@ -1357,7 +1357,7 @@
             ]
         }];
 
-        const REMOVED_ARTICLE_IDS = new Set([16, 20, 21, 27, 28, 35, 39, 42, 43, 44, 45, 46, 47, 48, 49, 50]);
+        const REMOVED_ARTICLE_IDS = new Set([16, 18, 19, 20, 21, 22, 24, 27, 28, 35, 39, 42, 43, 44, 45, 46, 47, 48, 49, 50]);
         ARTICLES.splice(0, ARTICLES.length, ...ARTICLES.filter(article => !REMOVED_ARTICLE_IDS.has(article.id)));
 
         // ================================================================
