@@ -154,7 +154,7 @@
     .mode-toggle button:hover{ color:#fff; }
     body.lightbox-open .mode-toggle,
     body.lightbox-open #globeLauncher,
-    body.lightbox-open #ticTacToeLauncher,
+    body.lightbox-open #infiniteGameLauncher,
     body.lightbox-open .ask-ai-button,
     body.lightbox-open .feedback-button,
     body.lightbox-open #contactBtn,
@@ -176,7 +176,7 @@
       position:fixed; inset:0; z-index:0; pointer-events:none;
     }
 
-    /* ============ GLOBE CONNECTOR (sits above the Tic-Tac-Toe launcher) ============ */
+    /* ============ GLOBE CONNECTOR (sits above the Infinite launcher) ============ */
     #globeLauncher{
       position:fixed; left:24px; bottom:92px; z-index:9997;
       display:flex; align-items:center; gap:10px;
@@ -543,22 +543,22 @@
 
   <canvas id="bgCanvas"></canvas>
 
-    <!-- Tic Tac Toe Launcher -->
-  <button id="ticTacToeLauncher" aria-label="Play Tic Tac Toe">
-      <span class="game-icon">✕</span>
-      <span class="game-label">Tic Tac Toe</span>
+    <!-- Infinite Game Launcher -->
+  <button id="infiniteGameLauncher" aria-label="Play Infinite">
+        <span class="game-icon">∞</span>
+        <span class="game-label">Infinite</span>
   </button>
 
-  <div id="ticTacToeOverlay">
-      <div class="ticTacToeWindow">
+    <div id="infiniteGameOverlay">
+      <div class="infiniteGameWindow">
 
-          <button id="closeTicTacToe" aria-label="Close game">
+          <button id="closeInfiniteGame" aria-label="Close game">
               ×
           </button>
 
           <iframe
-              src="tictactoe.html"
-              title="Tic Tac Toe Game">
+              src="infinite.html"
+              title="Infinite Game">
           </iframe>
 
       </div>
@@ -896,7 +896,7 @@
           lightboxContent.appendChild(box);
         }
         document.body.classList.add('lightbox-open');
-        ticTacToeOverlay.classList.remove('active');
+        infiniteGameOverlay.classList.remove('active');
         lightbox.classList.add('open');
         paused = true;
         document.body.style.overflow = 'hidden';
@@ -1027,10 +1027,10 @@
 
   <style>
     /* ============================= */
-  /* TIC TAC TOE GAME LAUNCHER     */
+  /* INFINITE GAME LAUNCHER         */
   /* ============================= */
 
-  #ticTacToeLauncher {
+  #infiniteGameLauncher {
       position: fixed;
       left: 24px;
       bottom: 24px;
@@ -1066,7 +1066,7 @@
           box-shadow .25s ease;
   }
 
-  #ticTacToeLauncher:hover {
+  #infiniteGameLauncher:hover {
       transform: translateY(-4px);
       background: rgba(25,28,42,.9);
 
@@ -1101,7 +1101,7 @@
   /* GAME OVERLAY                  */
   /* ============================= */
 
-  #ticTacToeOverlay {
+  #infiniteGameOverlay {
       position: fixed;
       inset: 0;
 
@@ -1119,11 +1119,11 @@
       padding: 20px;
   }
 
-  #ticTacToeOverlay.active {
+  #infiniteGameOverlay.active {
       display: flex;
   }
 
-  .ticTacToeWindow {
+  .infiniteGameWindow {
       position: relative;
 
       width: min(470px, 94vw);
@@ -1142,7 +1142,7 @@
           0 0 50px rgba(100,120,255,.08);
   }
 
-  .ticTacToeWindow iframe {
+  .infiniteGameWindow iframe {
       width: 100%;
       height: 100%;
 
@@ -1150,7 +1150,7 @@
       display: block;
   }
 
-  #closeTicTacToe {
+  #closeInfiniteGame {
       position: absolute;
 
       top: 12px;
@@ -1177,7 +1177,7 @@
       transition: .2s ease;
   }
 
-  #closeTicTacToe:hover {
+  #closeInfiniteGame:hover {
       background: rgba(255,255,255,.15);
       transform: rotate(90deg);
   }
@@ -1187,7 +1187,7 @@
 
   @media (max-width: 600px) {
 
-      #ticTacToeLauncher {
+      #infiniteGameLauncher {
           left: 16px;
           bottom: 16px;
           padding: 11px 13px;
@@ -1198,14 +1198,14 @@
           display: inline;
       }
 
-      .ticTacToeWindow {
+      .infiniteGameWindow {
           width: 96vw;
           height: 88vh;
           border-radius: 22px;
       }
   }
   @media (max-width: 420px) {
-      #ticTacToeLauncher {
+      #infiniteGameLauncher {
           left: 12px;
           bottom: 16px;
           padding: 10px 12px;
@@ -1309,7 +1309,7 @@
         letter-spacing: .08em;
         gap: 8px;
       }
-      #ticTacToeLauncher {
+      #infiniteGameLauncher {
         left: 16px;
         bottom: 16px;
       }
@@ -1364,7 +1364,7 @@
       .feedback-button { bottom: 92px; }
       .ask-ai-button, .feedback-button { padding: 10px 12px; }
       .ask-ai-button { bottom: 16px; }
-      #ticTacToeLauncher { bottom: 16px; }
+      #infiniteGameLauncher { bottom: 16px; }
       .ask-ai-button .label,
       .feedback-button .label { font-size: 9px; }
     }
@@ -1378,32 +1378,38 @@
   </style>
   <script>
   /* ============================= */
-  /* TIC TAC TOE CONNECTOR          */
+  /* INFINITE GAME CONNECTOR        */
   /* ============================= */
 
-  const ticTacToeLauncher =
-      document.getElementById("ticTacToeLauncher");
+    const infiniteGameLauncher =
+      document.getElementById("infiniteGameLauncher");
 
-  const ticTacToeOverlay =
-      document.getElementById("ticTacToeOverlay");
+    const infiniteGameOverlay =
+      document.getElementById("infiniteGameOverlay");
 
-  const closeTicTacToe =
-      document.getElementById("closeTicTacToe");
+    const closeInfiniteGame =
+      document.getElementById("closeInfiniteGame");
 
-  ticTacToeLauncher.addEventListener("click", () => {
-      ticTacToeOverlay.classList.add("active");
+  infiniteGameLauncher.addEventListener("click", () => {
+      infiniteGameOverlay.classList.add("active");
   });
 
-  closeTicTacToe.addEventListener("click", () => {
-      ticTacToeOverlay.classList.remove("active");
+  closeInfiniteGame.addEventListener("click", () => {
+      document.querySelector('#infiniteGameOverlay iframe')?.contentWindow.postMessage({ type: 'stop-infinite-game' }, '*');
+      infiniteGameOverlay.classList.remove("active");
   });
+
+    function closeInfiniteGameOverlay() {
+      document.querySelector('#infiniteGameOverlay iframe')?.contentWindow.postMessage({ type: 'stop-infinite-game' }, '*');
+      infiniteGameOverlay.classList.remove("active");
+    }
 
   /* Close by clicking outside the game */
 
-  ticTacToeOverlay.addEventListener("click", (event) => {
+    infiniteGameOverlay.addEventListener("click", (event) => {
 
-      if (event.target === ticTacToeOverlay) {
-          ticTacToeOverlay.classList.remove("active");
+      if (event.target === infiniteGameOverlay) {
+        closeInfiniteGameOverlay();
       }
 
   });
@@ -1413,7 +1419,7 @@
   document.addEventListener("keydown", (event) => {
 
       if (event.key === "Escape") {
-          ticTacToeOverlay.classList.remove("active");
+          closeInfiniteGameOverlay();
       }
 
   });
