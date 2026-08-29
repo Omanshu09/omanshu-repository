@@ -1669,6 +1669,18 @@
               </div>
             </div>
 
+            <!-- ===== PROJECT 4: NEXUS 3D ===== -->
+            <div class="proj-card" data-project="nexus">
+              <div class="proj-num">04</div>
+              <div>
+                <div class="proj-name">Nexus 3D — Collaborative Engineering Workspace</div>
+                <div class="proj-hint">Click to read the full case study ▸</div>
+              </div>
+              <div class="proj-stack">
+                <span>React</span><span>Node.js</span><span>Yjs</span><span>CRDT</span><span>PostgreSQL</span><span>E2B</span>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
@@ -2012,6 +2024,44 @@
               </div>
             </div>
 
+            <!-- ===== NEW: Oxford AI, Justice and Rule of Law ===== -->
+            <div class="cert-item" data-cert="oxford-ai">
+              <div class="cert-header" tabindex="0" role="button">
+                <div class="cert-header-left">
+                  <span class="cert-header-name">AI, Justice and Rule of Law</span>
+                  <span class="cert-header-provider">University of Oxford</span>
+                </div>
+                <span class="cert-toggle">+</span>
+              </div>
+              <div class="cert-body">
+                <div class="cert-detail-header">
+                  <div class="cert-detail-name">AI, Justice and Rule of Law</div>
+                  <div class="cert-detail-provider">University of Oxford</div>
+                </div>
+                <div class="cert-detail-sections">
+                  <div class="cert-section-block">
+                    <h4>About the Certification</h4>
+                    <ul>
+                      <li>This programme from the University of Oxford explores the intersection of artificial intelligence, justice, and the rule of law. It examines how AI systems are being deployed in legal and judicial contexts, the risks they pose to fairness and due process, and the regulatory frameworks needed to ensure accountability and transparency.</li>
+                      <li>The curriculum draws on Oxford's research in law, ethics, and computer science, providing a multidisciplinary perspective on the governance of AI. Topics include algorithmic bias, explainability, legal liability, and the role of human oversight in automated decision-making systems.</li>
+                      <li>Throughout the programme, I studied case studies from around the world, including the use of AI in predictive policing, sentencing, asylum decisions, and judicial analytics. The course also covered the emerging principles of "AI ethics by design" and the international efforts to standardise AI regulation.</li>
+                    </ul>
+                  </div>
+                  <div class="cert-section-block">
+                    <h4>What I Learned</h4>
+                    <ul>
+                      <li><strong>AI in the justice system</strong> — how machine learning is used in legal prediction, risk assessment, and evidence analysis</li>
+                      <li><strong>Ethical frameworks</strong> — fairness, accountability, and transparency principles applied to AI</li>
+                      <li><strong>Regulatory approaches</strong> — comparing the EU AI Act, GDPR, and other emerging legal standards</li>
+                      <li><strong>Algorithmic bias</strong> — detecting and mitigating discrimination in automated decision-making</li>
+                      <li><strong>Human oversight</strong> — designing systems that keep human judgment at the centre of high‑stakes decisions</li>
+                      <li><strong>Rule of law considerations</strong> — how AI challenges traditional notions of due process, legal certainty, and judicial independence</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
@@ -2233,6 +2283,78 @@
           <p>This system empowers users to quickly verify image authenticity, helping to combat misinformation. It is particularly useful for journalists, social media moderators, and security teams who need to assess visual content in real time.</p>
 
           <a href="https://github.com/Omanshu09/Deepfake-image-integrity-system" target="_blank" rel="noopener noreferrer" class="github-btn-modal">→ View on GitHub</a>
+        `
+      },
+      nexus: {
+        title: 'Nexus 3D — Collaborative Engineering Workspace',
+        subtitle: 'A real‑time collaborative environment with CRDT sync, offline persistence, and isolated Python execution.',
+        body: `
+          <h3>Overview</h3>
+          <p>Nexus 3D is a distributed, real‑time collaborative engineering workspace designed for teams who need to write, experiment, and execute code together. It combines a shared collaborative notepad, an independent Python runner, and a shared execution terminal — all within a persistent room that works even when the network drops.</p>
+          <p>The system is built around a simple idea: <em>“What if two developers could enter the same engineering room, write together in real time, execute Python independently, and continue working safely even when the network disappears?”</em></p>
+
+          <h3>Why I Built It</h3>
+          <p>When working on collaborative projects, I often found myself switching between multiple tools — chat apps, document editors, code runners, and terminals. Each tool solved a narrow problem, but none of them offered a unified space where collaboration and execution lived together. I wanted to build a lightweight engineering environment that combined shared documentation, independent code experimentation, and real‑time visibility of execution results — all in one room.</p>
+
+          <h3>Problem Statement</h3>
+          <p>Traditional collaborative editors synchronize text, but they don't provide an integrated execution environment. Code runners let you execute code, but they're usually single‑user. Online‑only apps work well when connected, but temporary connectivity loss can create an uncomfortable experience — users are never sure if their work has been preserved. Nexus solves these problems by combining CRDT‑based collaboration, offline persistence, and isolated code execution into a single platform.</p>
+
+          <h3>Architecture &amp; Implementation</h3>
+          <p>Nexus is built as a distributed system with clear separation of responsibilities:</p>
+          <ul>
+            <li><strong>Frontend (Vercel):</strong> React application with TypeScript, Vite, and React Three Fiber for the 3D landing experience.</li>
+            <li><strong>Backend (Render):</strong> Node.js/Express server that orchestrates room persistence, Ably authentication, and E2B execution requests.</li>
+            <li><strong>Realtime Layer (Ably):</strong> Pub/sub infrastructure that distributes collaboration updates between users in the same room.</li>
+            <li><strong>CRDT Engine (Yjs):</strong> Manages conflict‑free replicated state for the shared notepad and the independent Python editor.</li>
+            <li><strong>Database (Neon PostgreSQL):</strong> Durable storage for room state, enabling users to return to a room later.</li>
+            <li><strong>Local Persistence (IndexedDB):</strong> y‑indexeddb provider keeps the browser state available during network interruptions.</li>
+            <li><strong>Code Execution (E2B):</strong> Isolated sandbox for Python execution — user code never runs directly on the backend server.</li>
+          </ul>
+          <p>The most important design decision is that the notepad and the Python runner are <strong>two independent Yjs shared texts</strong>. This prevents the common mistake of treating the entire workspace as one monolithic shared state. The notepad is collaborative; the Python editor is independently editable; and execution results are visible to the room.</p>
+
+          <h3>Key Features</h3>
+          <ul>
+            <li><strong>Real‑time collaboration</strong> – changes appear instantly across connected clients.</li>
+            <li><strong>Offline persistence</strong> – local state is retained in IndexedDB, so work isn't lost during network interruptions.</li>
+            <li><strong>Durable room persistence</strong> – room state is stored in PostgreSQL, allowing users to return later.</li>
+            <li><strong>Isolated Python execution</strong> – code runs in an E2B sandbox, not on the main backend server.</li>
+            <li><strong>Shared execution terminal</strong> – execution results are visible to all room members.</li>
+            <li><strong>Invite‑based access</strong> – rooms are identified by human‑readable names (e.g., <code>lunar-orbital-gbbf</code>).</li>
+            <li><strong>Dark/light theme</strong> – UI adapts to user preference.</li>
+            <li><strong>3D landing experience</strong> – a distinctive Three.js network visualization reinforces the “connected” metaphor.</li>
+          </ul>
+
+          <h3>Technology Stack</h3>
+          <p>
+            <span class="tech-tag">React</span>
+            <span class="tech-tag">TypeScript</span>
+            <span class="tech-tag">Node.js</span>
+            <span class="tech-tag">Express</span>
+            <span class="tech-tag">Yjs</span>
+            <span class="tech-tag">CRDT</span>
+            <span class="tech-tag">Ably</span>
+            <span class="tech-tag">PostgreSQL</span>
+            <span class="tech-tag">Neon</span>
+            <span class="tech-tag">E2B</span>
+            <span class="tech-tag">IndexedDB</span>
+            <span class="tech-tag">Vercel</span>
+            <span class="tech-tag">Render</span>
+            <span class="tech-tag">Three.js</span>
+          </p>
+
+          <h3>Benchmarks &amp; Results</h3>
+          <p>The system has been tested across the major intended workflows. Key performance characteristics:</p>
+          <ul>
+            <li><strong>Collaboration latency:</strong> Sub‑second perceived synchronization under normal connected conditions.</li>
+            <li><strong>Offline resilience:</strong> Local state is retained and synchronized when connectivity returns.</li>
+            <li><strong>Python execution:</strong> Sandbox startup and execution typically complete in under 5 seconds for simple programs.</li>
+          </ul>
+          <p>The most meaningful benchmark is the combination of real‑time collaboration, offline persistence, durable storage, and isolated execution — all working together in one integrated system.</p>
+
+          <h3>How It’s Useful</h3>
+          <p>Nexus is ideal for pair programming, remote code reviews, collaborative debugging, and educational settings. It reduces the friction of sharing code and results across multiple apps, and its offline‑first design gives users confidence that their work is safe even when the network is unreliable.</p>
+
+          <a href="https://github.com/Omanshu09/Nexus-deployment" target="_blank" rel="noopener noreferrer" class="github-btn-modal">→ View on GitHub</a>
         `
       }
     };
