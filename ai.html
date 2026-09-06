@@ -509,13 +509,7 @@
 <script src="resumeData.js"></script>
 <script src="webConnector.js"></script>
 <script>
-  /*
-    ============================================================
-    OMANSHU AI — RESUME + GENERAL WEB KNOWLEDGE
-    ============================================================
-    Personal answers come from resumeData.js.
-    General/basic questions use webConnector.js.
-  */
+ 
 
   function allSkills(){
     return [
@@ -596,7 +590,6 @@
         : "The current resume does not state Omanshu's age.";
     }
 
-    // Identity / summary.
     if(
       q.includes("name") ||
       q.includes("who is omanshu") ||
@@ -610,12 +603,11 @@
       return `<strong>${escapeHTML(resumeData.name)}</strong> is a Computer Engineering graduate based in ${escapeHTML(resumeData.location)}. ${escapeHTML(resumeData.summary)}`;
     }
 
-    // Contact.
     if(q.includes("contact") || q.includes("email") || q.includes("phone") || q.includes("number")){
       return `The resume lists <strong>${escapeHTML(resumeData.email)}</strong> and <strong>${escapeHTML(resumeData.phone)}</strong>.`;
     }
 
-    // Education.
+  
     if(
       q.includes("education") || q.includes("degree") || q.includes("college") ||
       q.includes("university") || q.includes("study") || q.includes("studied") ||
@@ -625,7 +617,7 @@
       return educationAnswer();
     }
 
-    // Skills / AI stack.
+   
     if(
       q.includes("skill") || q.includes("technology") || q.includes("technologies") ||
       q.includes("tech stack") || q.includes("programming language") ||
@@ -636,7 +628,6 @@
       return skillsAnswer();
     }
 
-    // Projects, including project-specific questions.
     const project = findProject(q);
     if(project){
       const details = (project.details || []).map(d => escapeHTML(d)).join(" ");
@@ -650,7 +641,6 @@
       return projectsAnswer();
     }
 
-    // Experience.
     if(
       q.includes("internship") || q.includes("experience") ||
       q.includes("intern") || q.includes("worked") || q.includes("work experience")
@@ -658,17 +648,14 @@
       return experienceAnswer();
     }
 
-    // Certifications.
     if(q.includes("certification") || q.includes("certificate") || q.includes("course")){
       return list(resumeData.certifications);
     }
 
-    // Languages can mean spoken languages OR programming languages.
     if(q.includes("programming language") || q.includes("coding language")){
       return `Programming languages listed on the resume: ${list(resumeData.skills.languages)}.`;
     }
 
-    // Interests only if actual data exists.
     if(q.includes("interest") || q.includes("hobby") || q.includes("hobbies")){
       if(resumeData.interests?.length){
         return `Interests listed on the resume: ${list(resumeData.interests)}.`;
@@ -676,17 +663,13 @@
       return "The current resume does not list personal interests or hobbies.";
     }
 
-    // A generic fallback is null so the web connector gets a chance.
     return null;
   }
 
   async function answerQuestion(question){
     const personal = resumeAnswer(question);
-
-    // If the resume has a definite answer (including "not stated"), use it.
     if(personal !== null) return personal;
 
-    // Otherwise try calculator / web knowledge.
     if(window.webConnector){
       const result = await window.webConnector.ask(question);
       if(result?.answer){
