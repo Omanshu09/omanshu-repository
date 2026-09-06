@@ -42,8 +42,6 @@
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
         }
-
-        /* ============ HEADER ============ */
         .blog-header {
             position: relative;
             padding: 56px 6vw 40px;
@@ -92,8 +90,6 @@
             line-height: 1.7;
             color: var(--text-dim);
         }
-
-        /* ============ CONTROLS ============ */
         .controls {
             position: sticky;
             top: 0;
@@ -188,8 +184,6 @@
                 width: 100%;
             }
         }
-
-        /* ============ ARTICLE LIST ============ */
         .article-list-wrap {
             padding: 36px 6vw 60px;
             max-width: 900px;
@@ -279,8 +273,6 @@
             display: block;
             color: var(--text-faint);
         }
-
-        /* ============ PAGINATION ============ */
         .pagination {
             display: flex;
             justify-content: center;
@@ -338,7 +330,6 @@
             }
         }
 
-        /* ============ ARTICLE DETAIL ============ */
         .article-detail {
             position: fixed;
             inset: 0;
@@ -493,7 +484,6 @@
     </style>
 </head>
 <body>
-    <!-- BLOG BACKGROUND VIDEO -->
 <video
     id="blogBackgroundVideo"
     autoplay
@@ -523,7 +513,6 @@
     }
 </style>
 
-    <!-- ===================== HEADER ===================== -->
     <header class="blog-header">
         <a class="home-link" href="index.html">← Home</a>
         <div class="eyebrow">Dispatches &amp; observations</div>
@@ -531,7 +520,6 @@
         <p class="sub">Short write-ups on the things worth a second look — engineering, exploration, and the objects that shaped them.</p>
     </header>
 
-    <!-- ===================== CONTROLS ===================== -->
     <div class="controls">
         <div class="search-box">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -541,7 +529,6 @@
         <div class="result-count" id="resultCount"></div>
     </div>
 
-    <!-- ===================== ARTICLE LIST ===================== -->
     <div class="article-list-wrap">
         <main class="article-list" id="articleList"></main>
         <div class="empty-state" id="emptyState">
@@ -551,7 +538,6 @@
         <div class="pagination" id="pagination"></div>
     </div>
 
-    <!-- ===================== ARTICLE DETAIL ===================== -->
     <div class="article-detail" id="articleDetail">
         <div class="detail-topbar">
             <button class="close-btn" id="closeBtn" aria-label="Close">✕</button>
@@ -560,10 +546,7 @@
     </div>
 
     <script>
-        // ================================================================
-        //  ALL 50 ARTICLES — full content, 1200–1300 words each
-        //  Images: blog-article{id}-image1.jpg  /  blog-article{id}-image2.jpg
-        // ================================================================
+        
         const ARTICLES = [{
             id: 1,
             tag: "Space",
@@ -1360,17 +1343,13 @@
         const REMOVED_ARTICLE_IDS = new Set([16, 18, 19, 20, 21, 22, 24, 27, 28, 35, 39, 42, 43, 44, 45, 46, 47, 48, 49, 50]);
         ARTICLES.splice(0, ARTICLES.length, ...ARTICLES.filter(article => !REMOVED_ARTICLE_IDS.has(article.id)));
 
-        // ================================================================
-        //  STATE
-        // ================================================================
+      
         let activeTag = "All";
         let query = "";
         let currentPage = 1;
         const PER_PAGE = 10;
 
-        // ================================================================
-        //  DOM refs
-        // ================================================================
+      
         const articleList = document.getElementById('articleList');
         const tagFiltersEl = document.getElementById('tagFilters');
         const searchInput = document.getElementById('searchInput');
@@ -1381,9 +1360,7 @@
         const detailBody = document.getElementById('detailBody');
         const closeBtn = document.getElementById('closeBtn');
 
-        // ================================================================
-        //  TAGS
-        // ================================================================
+
         const TAGS = ["All", ...Array.from(new Set(ARTICLES.map(a => a.tag)))];
 
         function renderTagFilters() {
@@ -1402,9 +1379,6 @@
             });
         }
 
-        // ================================================================
-        //  FILTER
-        // ================================================================
         function matches(article) {
             const inTag = activeTag === "All" || article.tag === activeTag;
             const q = query.trim().toLowerCase();
@@ -1419,9 +1393,6 @@
             return ARTICLES.filter(matches);
         }
 
-        // ================================================================
-        //  PAGINATION
-        // ================================================================
         function getPageItems(filtered) {
             const total = filtered.length;
             const totalPages = Math.ceil(total / PER_PAGE) || 1;
@@ -1432,9 +1403,7 @@
             return { items: filtered.slice(start, end), total, totalPages, start, end };
         }
 
-        // ================================================================
-        //  RENDER LIST
-        // ================================================================
+
         function renderList() {
             const filtered = getFiltered();
             const { items, total, totalPages, start, end } = getPageItems(filtered);
@@ -1462,7 +1431,6 @@
                 articleList.appendChild(card);
             });
 
-            // pagination
             paginationEl.innerHTML = "";
             if (totalPages > 1) {
                 const prevBtn = document.createElement('button');
@@ -1498,18 +1466,14 @@
             }
         }
 
-        // ================================================================
-        //  SEARCH
-        // ================================================================
+     
         searchInput.addEventListener('input', (e) => {
             query = e.target.value;
             currentPage = 1;
             renderList();
         });
 
-        // ================================================================
-        //  DETAIL VIEW
-        // ================================================================
+    
         function openArticle(article) {
             const galleryItems = Array.from({ length: article.images }, (_, i) => {
                 const n = i + 1;
@@ -1547,9 +1511,7 @@
         closeBtn.addEventListener('click', closeArticle);
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeArticle(); });
 
-        // ================================================================
-        //  RANDOMISE order on homepage
-        // ================================================================
+   
         function shuffleArray(arr) {
             for (let i = arr.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -1558,12 +1520,10 @@
             return arr;
         }
 
-        // Shuffle once at load (mutates the original array order)
+    
         shuffleArray(ARTICLES);
 
-        // ================================================================
-        //  INIT
-        // ================================================================
+ 
         renderTagFilters();
         renderList();
     </script>
