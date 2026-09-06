@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contact</title>
 
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
     <style>
@@ -105,7 +104,6 @@
             transform: translateY(-4px);
         }
 
-        /* ----- CodeWars custom badge (replaces missing Font Awesome icon) ----- */
         .cw-badge {
             font-weight: 700;
             font-size: 15px;
@@ -116,21 +114,17 @@
             line-height: 1.7;
             display: inline-block;
             transition: color 0.2s, border-color 0.2s, transform 0.2s;
-            /* inherit color from parent <a> */
             color: inherit;
         }
 
-        /* Hover effect for the badge (matches other icons) */
         .social-row a:hover .cw-badge {
             color: #C99B4A;
             border-color: #C99B4A;
             transform: translateY(-4px);
         }
 
-        /* Ensure the badge doesn't shift during hover */
         .social-row a.cw-link {
             font-size: 0;
-            /* remove inherited font-size so we control it via .cw-badge */
         }
 
         .footer-note {
@@ -140,7 +134,6 @@
             letter-spacing: 0.06em;
         }
 
-        /* ----- responsiveness ----- */
         @media (max-width: 500px) {
             .contact-card {
                 padding: 28px 18px 24px;
@@ -171,33 +164,26 @@
     <div class="contact-card">
         <h2>📬 Contact</h2>
 
-        <!-- Email -->
         <div class="contact-item">
             <i class="fas fa-envelope"></i>
             <a href="mailto:omanshu25@gmail.com">omanshu25@gmail.com</a>
         </div>
 
-        <!-- Phone -->
         <div class="contact-item">
             <i class="fas fa-phone-alt"></i>
             <a href="tel:+918755118493">+91 87551 18493</a>
         </div>
 
-        <!-- Social links -->
         <div class="social-row">
-            <!-- Instagram -->
             <a href="https://www.instagram.com/omanshubhatt/" target="_blank" aria-label="Instagram">
                 <i class="fab fa-instagram"></i>
             </a>
-            <!-- Snapchat -->
             <a href="https://www.snapchat.com/add/omanshu_bhatt" target="_blank" aria-label="Snapchat">
                 <i class="fab fa-snapchat-ghost"></i>
             </a>
-            <!-- GitHub -->
             <a href="https://github.com/Omanshu09" target="_blank" aria-label="GitHub">
                 <i class="fab fa-github"></i>
             </a>
-            <!-- CodeWars (custom badge) -->
             <a href="https://www.codewars.com/users/Omanshu" target="_blank" aria-label="CodeWars" class="cw-link">
                 <span class="cw-badge">CW</span>
             </a>
