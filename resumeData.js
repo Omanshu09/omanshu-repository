@@ -1,6 +1,3 @@
-// Omanshu Bhatt — single source of truth for the portfolio AI.
-// Update this file whenever the resume changes.
-// Fields not present in the resume are intentionally left null.
 
 const resumeData = {
   name: "Omanshu Bhatt",
@@ -11,7 +8,6 @@ const resumeData = {
   summary:
     "Computer Engineering graduate with hands on experience building scalable backend systems, AI/ML applications and distributed software solutions. Proficient in Python, Java, SQL, FastAPI, PostgreSQL, Redis, Kafka, Docker and modern AI/ML technologies, with a strong foundation in data structures, databases, operating systems and software engineering. Certified in Agentic AI, cybersecurity fundamentals and web development, with experience developing reliable, production oriented solutions.",
 
-  // Personal information supplied directly by Omanshu for the portfolio AI.
   age: 21,
   dateOfBirth: "10 August 2005",
   interests: [
