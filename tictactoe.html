@@ -27,7 +27,6 @@
         position: relative;
     }
 
-    /* ── CLOSE BUTTON (top‑right) ── */
     .close-btn {
         position: fixed;
         top: 20px;
@@ -208,8 +207,6 @@
 
 <body>
 
-    <!-- ─── CLOSE BUTTON ─── -->
-    <!-- No href – we close the overlay via JavaScript -->
     <button class="close-btn" id="closeTicTacToeBtn" aria-label="Close game">✕</button>
 
     <div class="game">
@@ -255,19 +252,15 @@
     </div>
 
     <script>
-        // ─── CLOSE BUTTON: tells parent page to close the overlay ───
         document.getElementById('closeTicTacToeBtn').addEventListener('click', function() {
-            // Access the parent window's DOM (same origin) and remove the overlay
             const overlay = window.parent.document.getElementById('ticTacToeOverlay');
             if (overlay) {
                 overlay.classList.remove('active');
             } else {
-                // Fallback: if for some reason we're not in an iframe, go home
                 window.location.href = 'index.html';
             }
         });
 
-        // ─── GAME LOGIC ───
         const cells = document.querySelectorAll(".cell");
         const statusText = document.getElementById("status");
 
