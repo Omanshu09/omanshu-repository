@@ -160,8 +160,6 @@
             justify-content: center;
             flex-wrap: wrap;
         }
-
-        /* ———— BOOT ———— */
         #screen-boot {
             flex-direction: column;
         }
@@ -197,8 +195,6 @@
             color: var(--cyan);
             text-shadow: 0 0 8px rgba(0, 246, 255, .6);
         }
-
-        /* ———— MENU ———— */
         #screen-menu {
             flex-direction: column;
         }
@@ -283,8 +279,6 @@
             background: rgba(255, 46, 136, .15);
             border-color: rgba(255, 46, 136, .45);
         }
-
-        /* ———— AVATAR SELECT ———— */
         #screen-avatar {
             flex-direction: column;
         }
@@ -373,8 +367,6 @@
         .avatar-card.selected .check {
             display: flex;
         }
-
-        /* ———— COUNTDOWN ———— */
         #countdownText {
             font-size: clamp(4rem, 22vw, 9rem);
             font-weight: 800;
@@ -395,8 +387,6 @@
                 transform: scale(1);
             }
         }
-
-        /* ———— PAUSED ———— */
         #screen-paused {
             flex-direction: column;
         }
@@ -408,8 +398,6 @@
             color: var(--text);
             text-shadow: 0 0 20px rgba(139, 92, 246, .5);
         }
-
-        /* ———— GAME OVER ———— */
         #screen-gameover .panel {
             width: min(440px, 90vw);
             background: var(--glass);
@@ -468,7 +456,6 @@
             margin-top: 3px;
         }
 
-        /* ———— EXIT ———— */
         #screen-exit {
             z-index: 40;
             background: rgba(2, 2, 8, .55);
@@ -494,7 +481,6 @@
             line-height: 1.5;
         }
 
-        /* ———— HUD ———— */
         #hud {
             position: absolute;
             inset: 0;
@@ -667,7 +653,6 @@
         <div id="vignette"></div>
         <div id="scanline"></div>
 
-        <!-- HUD -->
         <div id="hud">
             <div class="hud-top">
                 <div class="stat score"><div class="lbl">Score</div><div class="val mono" id="score">0</div></div>
@@ -686,7 +671,6 @@
             </div>
         </div>
 
-        <!-- Boot -->
         <div class="screen" id="screen-boot">
             <div class="boot-wrap">
                 <div class="boot-title">I N F I N I T E</div>
@@ -698,7 +682,6 @@
             </div>
         </div>
 
-        <!-- Menu -->
         <div class="screen" id="screen-menu">
             <button class="close-game-btn" onclick="window.__game.closeGame()" title="Close">✕</button>
             <div>
@@ -714,7 +697,6 @@
             </div>
         </div>
 
-        <!-- Avatar Select -->
         <div class="screen" id="screen-avatar">
             <div style="width:100%;max-width:640px;">
                 <div class="avatar-title">CHOOSE YOUR AVATAR</div>
@@ -726,12 +708,10 @@
             </div>
         </div>
 
-        <!-- Countdown -->
         <div class="screen" id="screen-countdown">
             <div id="countdownText" class="mono">3</div>
         </div>
 
-        <!-- Paused -->
         <div class="screen" id="screen-paused">
             <div>
                 <div class="panel-title">PAUSED</div>
@@ -742,7 +722,6 @@
             </div>
         </div>
 
-        <!-- Game Over -->
         <div class="screen" id="screen-gameover">
             <div class="panel">
                 <div class="go-title">RUN OVER</div>
@@ -762,7 +741,6 @@
             </div>
         </div>
 
-        <!-- Exit confirm -->
         <div class="screen" id="screen-exit">
             <div class="panel">
                 <h3>Leave Game?</h3>
@@ -779,11 +757,10 @@
         (function() {
             'use strict';
 
-            /* ---------- constants ---------- */
             var SEG_LEN = 100;
             var ROAD_HALF = 900;
-            var PLAYER_HALF = 50;       // visual / clamp limit
-            var HIT_HALF = 28;          // tight collision radius (fixes midline false deaths)
+            var PLAYER_HALF = 50;       
+            var HIT_HALF = 28;         
             var CAM_HEIGHT = 380;
             var FOV = 100;
             var CAM_DEPTH = 1 / Math.tan((FOV / 2) * Math.PI / 180);
@@ -791,12 +768,9 @@
             var COLLECT_RADIUS = 55;
             var STEER_SPEED = 2800;
             var METERS_PER_UNIT = 0.05;
-            var SAFE_SEGMENTS = 70; // No obstacles for first 70 segments (safer start)
-
-            // Lane system: 5 lanes (like Subway Surfers)
+            var SAFE_SEGMENTS = 70; 
             var LANE_COUNT = 5;
             var LANE_WIDTH = (2 * ROAD_HALF) / LANE_COUNT; // 360
-            // Center of each lane: lane index 0..4
             function getLaneCenter(idx) { return -ROAD_HALF + LANE_WIDTH / 2 + idx * LANE_WIDTH; }
 
             var STAGES = [
@@ -840,7 +814,6 @@
                 return idx;
             }
 
-            /* ---------- AVATARS ---------- */
             var AVATARS = [{
                 id: 'astro',
                 name: 'Astronaut',
@@ -1192,7 +1165,6 @@
                 }
             }];
 
-            /* ---------- dom ---------- */
             var canvas = document.getElementById('gameCanvas');
             var ctx = canvas.getContext('2d');
             var dpr = 1;
@@ -1217,7 +1189,6 @@
             window.addEventListener('resize', resize);
             window.addEventListener('orientationchange', function() { setTimeout(resize, 150); });
 
-            /* ---------- audio ---------- */
             var actx = null,
                 masterGain = null,
                 muted = false;
@@ -1297,7 +1268,6 @@
             function sfxStage() { ensureAudio();
                 tone(440, 0.12, 'sine', 0.2, 660); }
 
-            /* ---------- state ---------- */
             var state = { screen: 'boot', prevScreen: 'menu', exitOpen: false };
             var selectedAvatar = AVATARS[0];
             var genState = { roadX: 0, curveValue: 0, curveTarget: 0, curveRemaining: 0, spawnCooldown: 20 };
@@ -1326,12 +1296,10 @@
             try { best = parseInt(localStorage.getItem('infinite_best_score') || '0', 10) || 0; } catch (e) { best = 0; }
             if (els.menuBest) els.menuBest.textContent = fmt(best);
 
-            /* ---------- helpers ---------- */
             function fmt(n) { return Math.floor(n).toLocaleString('en-US'); }
 
             function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
 
-            /* ---------- track generation (lane-based) ---------- */
             function generateSegment(i) {
                 var z = i * SEG_LEN;
                 var stage = stageForZ(z);
@@ -1348,7 +1316,6 @@
                 var seg = { index: i, x: genState.roadX, zone: zoneIdx, stripe: (i % 2 === 0), obstacles: [],
                     collectible: null };
 
-                // SAFE ZONE: No obstacles for first SAFE_SEGMENTS segments
                 var effectiveSpawnChance = 0;
                 if (i > SAFE_SEGMENTS) {
                     var ramp = Math.min(1, (i - SAFE_SEGMENTS) / 50);
@@ -1372,7 +1339,6 @@
                     if (genState.spawnCooldown > 0) genState.spawnCooldown--;
                 }
 
-                // Collectibles: exact center of a random free lane
                 if (!seg.obstacles.length && Math.random() < 0.12) {
                     var laneIdx = Math.floor(Math.random() * LANE_COUNT);
                     seg.collectible = {
@@ -1390,10 +1356,9 @@
                 var laneW = LANE_WIDTH;
 
                 if (type === 'wall') {
-                    // Block one full lane (narrower so adjacent lanes stay safe)
                     var laneIdx = Math.floor(Math.random() * laneCount);
                     var center = getLaneCenter(laneIdx);
-                    var half = laneW * 0.32; // was 0.4 — too wide, caused midline hits
+                    var half = laneW * 0.32; 
                     seg.obstacles.push({ type: 'wall', offset: center, half: half });
                 } else if (type === 'moving') {
                     var laneIdx2 = Math.floor(Math.random() * laneCount);
@@ -1402,7 +1367,6 @@
                     seg.obstacles.push({ type: 'moving', base: center2, half: half2, amp: laneW * 0.12,
                         speed: 0.9 + Math.random() * 0.9 });
                 } else if (type === 'gate') {
-                    // Leave a clear 1-lane gap to run through
                     var gapLane = Math.floor(Math.random() * laneCount);
                     for (var li = 0; li < laneCount; li++) {
                         if (li === gapLane) continue;
@@ -1410,7 +1374,6 @@
                         seg.obstacles.push({ type: 'wall', offset: c, half: laneW * 0.30 });
                     }
                 } else if (type === 'corridor') {
-                    // Block outer lanes, leave center 3 open
                     seg.obstacles.push({ type: 'wall', offset: getLaneCenter(0), half: laneW * 0.30 });
                     seg.obstacles.push({ type: 'wall', offset: getLaneCenter(4), half: laneW * 0.30 });
                 }
@@ -1431,12 +1394,11 @@
                 }
             }
 
-            /* ---------- run lifecycle ---------- */
             function resetRun() {
                 genState = { roadX: 0, curveValue: 0, curveTarget: 0, curveRemaining: 0, spawnCooldown: 24 };
                 segments = [];
                 segBase = 0;
-                var startLane = 2; // center lane
+                var startLane = 2; 
                 player = {
                     x: getLaneCenter(startLane),
                     z: 0,
@@ -1458,7 +1420,6 @@
                 ensureSeg(DRAW_DIST + 4);
             }
 
-            /* ---------- projection ---------- */
             function projectPoint(x, y, z, camX, camY, camZ, w, h) {
                 var relZ = z - camZ;
                 var cz = relZ < 60 ? 60 : relZ;
@@ -1479,7 +1440,6 @@
                 return a.x + (b.x - a.x) * frac;
             }
 
-            /* ---------- particles ---------- */
             function addParticle(p) { particles.push(p); if (particles.length > 240) particles.shift(); }
 
             function spawnExhaust(px, py) {
@@ -1521,9 +1481,7 @@
                 ctx.globalAlpha = 1;
             }
 
-            /* ---------- collision ---------- */
             function checkCollisions() {
-                // Safety: if player is in safe zone, ignore collisions entirely
                 if (player.z < SAFE_SEGMENTS * SEG_LEN) return;
 
                 var idx = Math.floor(player.z / SEG_LEN);
@@ -1532,7 +1490,6 @@
                     var ob = seg.obstacles[i];
                     var obX = ob.offset;
                     if (ob.type === 'moving') { obX = ob.base + Math.sin(gameTime * ob.speed + idx * 0.7) * ob.amp; }
-                    // Tight hitbox prevents false deaths on lane lines / mid-lane
                     var half = ob.half || 40;
                     if (Math.abs(player.x - obX) < half + HIT_HALF) { crash(); return; }
                 }
@@ -1551,7 +1508,6 @@
                 spawnBurst(viewW / 2, viewH * 0.62, 'rgba(255,210,63,ALPHA)', 18, 150);
             }
 
-            /* ---------- crash / gameover ---------- */
             function crash() {
                 if (state.screen !== 'playing') return;
                 state.screen = 'crashing';
@@ -1577,16 +1533,13 @@
                 setScreen('gameover');
             }
 
-            /* ---------- update ---------- */
             function updatePlayer(dt) {
                 var stage = stageForZ(player.z);
-                // No boost/brake — accelerate toward stage target speed
                 var targetSpeed = stage.speed;
                 player.speed += (targetSpeed - player.speed) * Math.min(1, dt * 1.6);
                 player.z += player.speed * dt;
                 player.maxSpeedSeen = Math.max(player.maxSpeedSeen, player.speed);
 
-                // Discrete 5-lane movement (center of each lane)
                 if (input.laneCooldown > 0) input.laneCooldown -= dt;
                 if (input.laneCooldown <= 0) {
                     if (input.left && player.lane > 0) {
@@ -1595,14 +1548,11 @@
                         changeLane(1);
                     }
                 }
-                // Smooth snap to exact lane center
                 player.x += (player.targetX - player.x) * Math.min(1, dt * 14);
 
-                // Safety: prevent NaN
                 if (isNaN(player.x)) player.x = getLaneCenter(2);
                 if (isNaN(player.z)) player.z = 0;
 
-                // Score: based on distance
                 score += player.speed * dt * 0.012;
 
                 var lean = clamp((player.targetX - player.x) * 0.008, -1, 1);
@@ -1627,7 +1577,6 @@
 
             function updateAmbient(dt) {
                 player.z += 1450 * dt;
-                // Gentle sway between center 3 lanes on menu
                 var ambientLane = 2 + Math.round(Math.sin(gameTime * 0.35));
                 ambientLane = clamp(ambientLane, 1, 3);
                 player.x += (getLaneCenter(ambientLane) - player.x) * Math.min(1, dt * 3);
@@ -1658,7 +1607,6 @@
                 }
             }
 
-            /* ---------- render ---------- */
             function drawSky(zone, w, h, horizon) {
                 var g = ctx.createLinearGradient(0, 0, 0, horizon);
                 g.addColorStop(0, zone.skyTop);
@@ -1731,7 +1679,6 @@
                 ctx.save();
                 var laneCount = LANE_COUNT;
 
-                // Outer road edges (solid, brighter)
                 ctx.globalAlpha = 0.55;
                 ctx.strokeStyle = '#eaf6ff';
                 ctx.lineWidth = Math.max(2.5, p1.sw * 0.022);
@@ -1745,7 +1692,6 @@
                 ctx.lineTo(p2.sx + p2.sw, Math.max(p2.sy, horizon));
                 ctx.stroke();
 
-                // 4 divider lines between the 5 lanes (dashed)
                 for (var i = 1; i < laneCount; i++) {
                     var frac = i / laneCount;
                     var x1 = p1.sx - p1.sw + 2 * p1.sw * frac;
@@ -1764,7 +1710,6 @@
                 ctx.restore();
             }
 
-            // ---- OBSTACLE (3D RED BLOCK) ----
             function drawObstacle3D(ob, worldX, idx, camX, camY, camZ, w, h, horizon) {
                 var p = projectPoint(worldX, 0, idx * SEG_LEN, camX, camY, camZ, w, h);
                 if (p.scale <= 0) return;
@@ -1846,7 +1791,6 @@
                 ctx.restore();
             }
 
-            // ---- STAR COLLECTIBLE ----
             function drawStarCollectible(c, worldX, idx, camX, camY, camZ, w, h) {
                 var p = projectPoint(worldX, 0, idx * SEG_LEN, camX, camY, camZ, w, h);
                 if (p.scale <= 0) return;
@@ -1908,13 +1852,11 @@
                 ctx.restore();
             }
 
-            // ---- AVATAR RENDER ----
             function drawAvatarInGame() {
                 var w = viewW,
                     h = viewH;
                 var cx = w / 2;
                 var cy = h * 0.79;
-                // Lean based on how far we still are from target lane center
                 var lean = clamp((player.targetX - player.x) * 0.004, -1, 1);
                 var tilt = lean * 0.22;
                 var bob = Math.sin(gameTime * 9) * 2.2;
@@ -1930,7 +1872,6 @@
                 ctx.restore();
             }
 
-            /* ---------- main render ---------- */
             function render() {
                 var w = viewW,
                     h = viewH;
@@ -1973,11 +1914,8 @@
                     ctx.lineTo(p2.sx - p2.sw, Math.max(p2.sy, horizon));
                     ctx.closePath();
                     ctx.fill();
-
-                    // Draw lane markings (4 lines)
                     drawLaneMarkings(segA, segB, p1, p2, zone, horizon, w, h);
 
-                    // side poles (decorative)
                     if (idx % 5 === 0) {
                         var poleH = p1.sw * 0.45;
                         ctx.fillStyle = zone.neon;
@@ -1987,7 +1925,6 @@
                         ctx.globalAlpha = 1;
                     }
 
-                    // obstacles
                     for (var oi = 0; oi < segA.obstacles.length; oi++) {
                         var ob = segA.obstacles[oi];
                         var obX = ob.offset;
@@ -1995,8 +1932,6 @@
                             .amp; }
                         drawObstacle3D(ob, segA.x + obX, idx, camX, camY, camZ, w, h, horizon);
                     }
-
-                    // collectibles
                     if (segA.collectible && !segA.collectible.collected) {
                         drawStarCollectible(segA.collectible, segA.x + segA.collectible.offset, idx, camX, camY, camZ,
                             w, h);
@@ -2012,7 +1947,6 @@
                 ctx.restore();
             }
 
-            /* ---------- HUD ---------- */
             function updateHUD() {
                 if (state.screen !== 'playing' && state.screen !== 'crashing') return;
                 if (els.score) els.score.textContent = fmt(score);
@@ -2031,7 +1965,6 @@
                 } else if (els.zoneToast) { els.zoneToast.style.opacity = 0; }
             }
 
-            /* ---------- screen management ---------- */
             function setScreen(name) {
                 state.screen = name;
                 var ids = ['boot', 'menu', 'avatar', 'countdown', 'paused', 'gameover'];
@@ -2044,7 +1977,6 @@
                 document.body.classList.toggle('is-playing', name === 'playing');
             }
 
-            /* ---------- avatar selection UI ---------- */
             function buildAvatarGrid() {
                 var grid = document.getElementById('avatarGrid');
                 grid.innerHTML = '';
@@ -2090,7 +2022,6 @@
                 });
             }
 
-            /* ---------- countdown ---------- */
             function startCountdown() {
                 resetRun();
                 setScreen('countdown');
@@ -2108,7 +2039,6 @@
                 step();
             }
 
-            /* ---------- exit ---------- */
             function openExit() {
                 state.prevScreen = state.screen;
                 state.exitOpen = true;
@@ -2137,8 +2067,7 @@
                     sfxClick(); }
             }
 
-            /* ---------- input ---------- */
-            // Keyboard — one key press = one lane change
+          
             window.addEventListener('keydown', function(e) {
                 if (['ArrowLeft', 'a', 'A'].indexOf(e.key) >= 0) {
                     e.preventDefault();
@@ -2158,8 +2087,7 @@
                 if (['ArrowRight', 'd', 'D'].indexOf(e.key) >= 0) input.right = false;
             });
 
-            // Mobile: tap LEFT half of screen → move left one lane
-            //          tap RIGHT half of screen → move right one lane
+        
             canvas.addEventListener('touchstart', function(e) {
                 e.preventDefault();
                 if (state.screen !== 'playing') return;
@@ -2179,7 +2107,6 @@
                 input.right = false;
             }, { passive: false });
 
-            // Mouse click support for desktop testing (left/right half)
             canvas.addEventListener('mousedown', function(e) {
                 if (state.screen !== 'playing') return;
                 var half = viewW / 2;
@@ -2190,7 +2117,6 @@
                 input.right = false;
             });
 
-            /* ---------- exposed game api ---------- */
             window.__game = {
                 play: function() {
                     ensureAudio();
@@ -2226,7 +2152,6 @@
                     if (masterGain) masterGain.gain.value = muted ? 0 : 0.55;
                     btn.classList.toggle('muted', muted);
                 },
-                // Close game and return to previous page (landing page)
                 closeGame: function() {
                     if (countdownTimer) clearTimeout(countdownTimer);
                     countdownTimer = null;
@@ -2243,7 +2168,6 @@
                 }
             };
 
-            /* ---------- boot ---------- */
             function bootSequence() {
                 var lines = document.querySelectorAll('#screen-boot .boot-line');
                 lines.forEach(function(l, i) {
@@ -2252,7 +2176,6 @@
                 setTimeout(function() { setScreen('menu'); }, 220 * lines.length + 500);
             }
 
-            /* ---------- main loop ---------- */
             var lastT = performance.now();
 
             function loop(t) {
