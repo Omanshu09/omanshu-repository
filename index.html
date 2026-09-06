@@ -4,10 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Omanshu Bhatt</title>
-  <!-- inline, non-blocking: paints the dark background instantly, before
-       the font-awesome / Google Fonts requests below have a chance to
-       delay first paint — this is what removes the white flash on load
-       and when navigating back from the globe page. -->
+ 
   <style>html,body{background:#171F1B;}</style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
@@ -24,7 +21,6 @@
       --display: 'Space Grotesk', sans-serif;
       --mono: 'IBM Plex Mono', monospace;
 
-      /* Orbit sizing — tweak these two to resize the whole ring */
       --radius: 250px;
       --img-size: 130px;
       --orbit-duration: 16s;
@@ -53,7 +49,6 @@
   background:url('background.jpg') center/cover no-repeat;
 }
 
-    /* ============ TOP BAR ============ */
     .topbar{
       position:fixed; top:0; left:0; right:0; z-index:50;
       display:flex; justify-content:space-between; align-items:center;
@@ -134,7 +129,6 @@
       }
     }
 
-    /* ============ MODE TOGGLE (Rings / Spiral) ============ */
     .mode-toggle{
       position:fixed; top:28px; left:50%; transform:translateX(-50%); z-index:55;
       display:flex; gap:28px; font-family:var(--display); font-weight:500;
@@ -171,12 +165,9 @@
       .mode-toggle button{ font-size:13px; }
     }
 
-    /* ============ INTERACTIVE BACKGROUND ============ */
     #bgCanvas{
       position:fixed; inset:0; z-index:0; pointer-events:none;
     }
-
-    /* ============ GLOBE CONNECTOR (sits above the Infinite launcher) ============ */
     #globeLauncher{
       position:fixed; left:24px; bottom:92px; z-index:9997;
       display:flex; align-items:center; gap:10px;
@@ -226,14 +217,11 @@
       #globeLauncher .globe-icon{ width:24px; height:24px; }
     }
 
-    /* ============ STAGE ============ */
     .stage{
       position:relative; width:100vw; height:100vh;
       display:flex; align-items:center; justify-content:center;
       perspective:1700px;
     }
-
-    /* ---- center emblem: contour/topographic mark, stands in for K95's "road" ---- */
     .emblem{
       position:relative; z-index:1; display:flex; flex-direction:column;
       align-items:center; justify-content:center; text-align:center; pointer-events:none;
@@ -251,9 +239,6 @@
 
 
 
-    /* ---- orbit ring: true 3D carousel, JS-driven every frame — see script.
-      Rings mode = 3 stacked rings all spinning in 3D depth.
-      Spiral mode = infinite vertical helix (wraps top<->bottom forever). ---- */
     .orbit-ring{
       position:absolute; top:50%; left:50%; width:0; height:0;
       transform-style:preserve-3d;
@@ -263,7 +248,6 @@
       position:absolute; top:0; left:0;
       width:var(--img-size); height:var(--img-size);
       transform-style:preserve-3d;
-      /* transform set continuously by JS */
     }
 
     .orbit-img{
@@ -275,7 +259,6 @@
     .orbit-img img{
       width:100%; height:100%; object-fit:cover; display:block;
     }
-    /* placeholder look — disappears automatically once a real <img> has a src */
     .orbit-img .placeholder-label{
       font-family:var(--mono); font-size:11px; color:var(--text-faint);
       border:1px dashed var(--line); width:90%; height:90%; border-radius:4px;
@@ -311,7 +294,6 @@
       .emblem .pulse{ animation:none; }
     }
 
-    /* ============ LIGHTBOX (tap an image to enlarge) ============ */
     .orbit-img{ cursor:pointer; }
 
     .lightbox{
@@ -352,7 +334,6 @@
       background:#212C25;
     }
 
-    /* ---- lightbox: image + tap-to-download + caption beneath ---- */
     .lightbox-content{
       flex-direction:column;
       gap:16px;
@@ -407,7 +388,6 @@
       .lightbox-download{ width:36px; height:36px; font-size:14px; }
     }
 
-    /* ---- download confirm dialog ---- */
     .download-confirm-overlay{
       position:fixed; inset:0; z-index:220;
       background:rgba(10,14,12,0.6);
@@ -440,7 +420,6 @@
       color:var(--bg); border:none;
     }
     .download-confirm-actions .confirm-no:hover{ border-color:var(--gold); color:var(--gold); }
-    /* Contact button (top-right) */
 .contact-btn {
   background: none;
   border: 1px solid rgba(255,255,255,0.12);
@@ -466,7 +445,6 @@
   background: rgba(201,155,74,0.08);
 }
 
-/* Contact + Blog stack (top-right) */
 .topbar-actions {
   display: flex;
   flex-direction: column;
@@ -478,7 +456,6 @@
   .topbar-actions { gap: 8px; }
 }
 
-/* Popup overlay – hidden by default */
 #contactOverlay {
   display: none;
   position: fixed;
@@ -543,7 +520,6 @@
 
   <canvas id="bgCanvas"></canvas>
 
-    <!-- Infinite Game Launcher -->
   <button id="infiniteGameLauncher" aria-label="Play Infinite">
         <span class="game-icon">∞</span>
         <span class="game-label">Infinite</span>
@@ -572,7 +548,6 @@
     <a class="cta" href="portfolio.html">View portfolio <span class="arrow">→</span></a>
   </div>
 
-  <!-- 🔽 CONTACT + BLOG (right side, stacked) -->
   <div class="topbar-actions">
     <button id="contactBtn" class="contact-btn">
       <i class="fas fa-comment-dots"></i> Contact
@@ -595,33 +570,8 @@
 
     <div class="stage">
 
-      <!-- ===================== CENTER EMBLEM =====================
-          This stands in for K95's "road." Placeholder = topographic
-          contour rings + your initials. Swap this whole .emblem block
-          for whatever center visual you decide on later. -->
-      
-
-      <!-- ===================== ORBIT RING =====================
-          8 image slots, evenly spaced (360° / 8 = 45° apart),
-          orbiting the center continuously.
-
-          TO ADD YOUR IMAGES:
-          1. Put your image files in an /images folder next to this file.
-          2. For each slot below, find the empty <div class="orbit-img">
-              and put your image inside it, e.g.:
-                <div class="orbit-img">
-                  <img src="images/project1.jpg" alt="Describe this image">
-                </div>
-          3. Right now each slot shows a dashed placeholder box — that's
-              just so you can see the layout. It disappears once you add
-              a real <img> inside it.
-          4. Want more or fewer than 8 images? Copy or delete whole
-              <div class="orbit-item"> blocks, and adjust every --angle
-              value so they're evenly spaced again (360 ÷ number of items).
-      -->
       <div class="orbit-ring">
 
-        <!-- SLOT 1 -->
         <div class="orbit-item" style="--angle:0deg;">
           <div class="orbit-img">
             <img src="image1.jpg" alt="Earth to the Moon"
@@ -630,7 +580,6 @@
           </div>
         </div>
 
-        <!-- SLOT 2 -->
         <div class="orbit-item" style="--angle:45deg;">
           <div class="orbit-img">
             <img src="image2.jpg" alt="Porsche 911"
@@ -639,7 +588,6 @@
           </div>
         </div>
 
-        <!-- SLOT 3 -->
         <div class="orbit-item" style="--angle:90deg;">
           <div class="orbit-img">
             <img src="image3.jpg" alt="Milky Way Observatory"
@@ -648,7 +596,6 @@
           </div>
         </div>
 
-        <!-- SLOT 4 -->
         <div class="orbit-item" style="--angle:135deg;">
           <div class="orbit-img">
             <img src="image4.jpg" alt="Napoleon's Tomb, Paris"
@@ -657,7 +604,6 @@
           </div>
         </div>
 
-        <!-- SLOT 5 -->
         <div class="orbit-item" style="--angle:180deg;">
           <div class="orbit-img">
             <img src="image5.jpg" alt="Deep Sea Exploration"
@@ -666,7 +612,6 @@
           </div>
         </div>
 
-        <!-- SLOT 6 -->
         <div class="orbit-item" style="--angle:225deg;">
           <div class="orbit-img">
             <img src="image6.jpg" alt="Millau Viaduct, France"
@@ -675,7 +620,6 @@
           </div>
         </div>
 
-        <!-- SLOT 7 -->
         <div class="orbit-item" style="--angle:270deg;">
           <div class="orbit-img">
             <img src="image7.jpg" alt="Leica Camera"
@@ -684,7 +628,6 @@
           </div>
         </div>
 
-        <!-- SLOT 8 -->
         <div class="orbit-item" style="--angle:315deg;">
           <div class="orbit-img">
             <img src="image8.jpg" alt="Sverd i fjell, Norway"
@@ -694,18 +637,15 @@
         </div>
 
       </div>
-      <!-- ===================== END ORBIT RING ===================== -->
 
     </div>
 
     
-    <!-- ===================== LIGHTBOX ===================== -->
     <div class="lightbox" id="lightbox">
       <button class="lightbox-back" id="lightboxBack">← Back</button>
       <div class="lightbox-content" id="lightboxContent"></div>
     </div>
 
-    <!-- ===================== DOWNLOAD CONFIRM ===================== -->
     <div class="download-confirm-overlay" id="downloadConfirmOverlay">
       <div class="download-confirm-box">
         <p>Download this image?</p>
@@ -717,23 +657,13 @@
     </div>
 
     <script>
-      /* ===================== 3D RING / SPIRAL ENGINE =====================
-        Rings mode: your 8 images cloned into 3 stacked rings (top/mid/
-        bottom), each rotating in true 3D depth (rotateY + translateZ) —
-        front images appear larger/brighter, far-side images smaller/
-        dimmer and pass behind, visible from the back too.
-        Spiral mode: the original 8 images rise/fall in an infinite
-        vertical helix, fading out at the very top/bottom and reappearing
-        on the opposite side — a continuous loop, nothing just vanishes.
-        Scroll (wheel/trackpad) spins everything; there's also a gentle
-        idle drift when you're not scrolling.
-      */
+      
       const CONFIG = {
         idleSpeed: 0.20,
         scrollSensitivity: 0.045,
         damping: 0.92,
-        spiralSpeed: 0.6,   // px/frame the spiral rises — independent of rotation
-        spiralSpan: 520      // px — total vertical travel before wrapping
+        spiralSpeed: 0.6,   
+        spiralSpan: 520      
       };
       const mobileCompact = window.innerWidth <= 600;
       const mobileIdleBoost = mobileCompact ? 0.18 : 0;
@@ -744,16 +674,14 @@
       const N = originalItems.length;
       const radius = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--radius'));
 
-      // Build the 3-tier structure for Rings mode by cloning the original
-      // 8 slots — this means you only ever have to edit images in ONE
-      // place (the original 8 slots in the HTML) and all 3 rings update.
+      
       const TIERS = [
         { name:'top',    yOffset: mobileCompact ? -88 : -190, radiusScale: mobileCompact ? 0.68 : 0.8,  speedMul:1.15, opacityMul:0.85, el:null, items:null },
         { name:'mid',    yOffset:0,    radiusScale: mobileCompact ? 0.82 : 1,    speedMul:1,    opacityMul:1,    el:originalRing, items:originalItems },
         { name:'bottom', yOffset: mobileCompact ? 88 : 190, radiusScale: mobileCompact ? 0.68 : 0.8,  speedMul:0.85, opacityMul:0.85, el:null, items:null }
       ];
       TIERS.forEach(tier=>{
-        if(tier.el) return; // mid tier already exists
+        if(tier.el) return; 
         const clone = originalRing.cloneNode(true);
         clone.classList.add('orbit-ring-clone');
         stage.appendChild(clone);
@@ -791,8 +719,7 @@
             });
           });
         } else {
-          // Spiral: hide the extra tiers, animate only the original 8
-          // in an infinite vertical helix.
+         
           TIERS.forEach(tier=>{ if(tier.name !== 'mid') tier.el.style.display = 'none'; });
           originalRing.style.display = 'block';
           const span = CONFIG.spiralSpan;
@@ -827,8 +754,7 @@
 
       tick();
 
-      /* ===================== LIGHTBOX =====================
-        Uses event delegation so it works on the cloned tier images too. */
+   
       const lightbox = document.getElementById('lightbox');
       const lightboxContent = document.getElementById('lightboxContent');
       const lightboxBack = document.getElementById('lightboxBack');
@@ -842,7 +768,7 @@
         const realImg = orbitImgEl.querySelector('img');
         lightboxContent.innerHTML = '';
         if(realImg){
-          // image + tap-to-reveal download icon
+         
           const media = document.createElement('div');
           media.className = 'lightbox-media';
 
@@ -868,7 +794,7 @@
 
           lightboxContent.appendChild(media);
 
-          // heading + description below the image
+        
           const title = realImg.dataset.title || '';
           const desc = realImg.dataset.desc || '';
           if(title || desc){
@@ -919,7 +845,7 @@
       lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox) closeLightbox(); });
       document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeLightbox(); });
 
-      /* ---- download confirm: "yes" downloads the file, "no" cancels ---- */
+    
       confirmDownloadYes.addEventListener('click', ()=>{
         if(pendingDownloadUrl){
           const a = document.createElement('a');
@@ -941,12 +867,7 @@
     </script>
 
     <script>
-      /* ===================== INTERACTIVE BACKGROUND =====================
-        A quiet grid of points sits over your background image. While the
-        cursor is still, nothing happens. Moving it displaces nearby
-        points and shifts their color toward gold — it settles back once
-        you stop. Skipped entirely if the OS has "reduce motion" on.
-      */
+     
       if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
         const canvas = document.getElementById('bgCanvas');
         const ctx = canvas.getContext('2d');
@@ -996,7 +917,7 @@
               p.heat *= 0.94;
             }
 
-            // spring back toward the origin point
+          
             p.vx += (p.ox - p.x) * 0.02;
             p.vy += (p.oy - p.y) * 0.02;
             p.vx *= 0.85; p.vy *= 0.85;
@@ -1018,7 +939,6 @@
       }
     </script>
 
-  <!-- ASK ABOUT ME -->
   <a href="ai.html" class="ask-ai-button">
     <span class="ask-ai-dot"></span>
     <span class="label">Ask Me AI</span>
@@ -1026,9 +946,7 @@
   </a>
 
   <style>
-    /* ============================= */
-  /* INFINITE GAME LAUNCHER         */
-  /* ============================= */
+ 
 
   #infiniteGameLauncher {
       position: fixed;
@@ -1097,10 +1015,7 @@
   }
 
 
-  /* ============================= */
-  /* GAME OVERLAY                  */
-  /* ============================= */
-
+ 
   #infiniteGameOverlay {
       position: fixed;
       inset: 0;
@@ -1183,7 +1098,6 @@
   }
 
 
-  /* Mobile */
 
   @media (max-width: 600px) {
 
@@ -1318,8 +1232,6 @@
         white-space: nowrap;
       }
     }
-
-    /* FEEDBACK LAUNCHER — stacks above Ask About Me */
     .feedback-button {
       position: fixed;
       right: 32px;
@@ -1377,9 +1289,6 @@
   </a>
   </style>
   <script>
-  /* ============================= */
-  /* INFINITE GAME CONNECTOR        */
-  /* ============================= */
 
     const infiniteGameLauncher =
       document.getElementById("infiniteGameLauncher");
@@ -1404,8 +1313,6 @@
       infiniteGameOverlay.classList.remove("active");
     }
 
-  /* Close by clicking outside the game */
-
     infiniteGameOverlay.addEventListener("click", (event) => {
 
       if (event.target === infiniteGameOverlay) {
@@ -1413,8 +1320,6 @@
       }
 
   });
-
-  /* ESC key */
 
   document.addEventListener("keydown", (event) => {
 
@@ -1424,10 +1329,7 @@
 
   });
   </script>
-  <!-- =========================================================
-      ISOLATED GESTURE BACKGROUND
-      DOES NOT TOUCH ORBIT / IMAGES / LAYOUT
-      ========================================================= -->
+ 
 
   <canvas id="gestureCanvas"></canvas>
 
@@ -1458,9 +1360,6 @@
       let height = 0;
       let dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-      /* ---------------------------------------------------------
-        POINTER
-        --------------------------------------------------------- */
 
       const pointer = {
           x: -1000,
@@ -1472,9 +1371,6 @@
       };
 
 
-      /* ---------------------------------------------------------
-        PARTICLES
-        --------------------------------------------------------- */
 
       let particles = [];
 
@@ -1514,10 +1410,6 @@
 
           update() {
 
-              /*
-              * Very subtle natural movement
-              */
-
               this.vx +=
                   Math.sin(
                       performance.now() * 0.0005 +
@@ -1529,14 +1421,6 @@
                       performance.now() * 0.0004 +
                       this.phase
                   ) * 0.0004;
-
-
-              /*
-              * CURSOR GESTURE
-              *
-              * Only particles respond.
-              * Nothing else on your website is touched.
-              */
 
               if (pointer.active) {
 
@@ -1564,10 +1448,6 @@
                           1 -
                           distance / radius;
 
-                      /*
-                      * Cursor pushes particles outward
-                      */
-
                       this.vx -=
                           (dx / distance) *
                           strength *
@@ -1579,10 +1459,7 @@
                           0.035;
 
 
-                      /*
-                      * Movement direction
-                      * creates a flowing gesture
-                      */
+                     
 
                       this.vx +=
                           (pointer.x - pointer.lastX) *
@@ -1597,9 +1474,6 @@
               }
 
 
-              /*
-              * Return slowly to calm movement
-              */
 
               this.vx *= 0.94;
               this.vy *= 0.94;
@@ -1608,9 +1482,7 @@
               this.y += this.vy;
 
 
-              /*
-              * Screen wrapping
-              */
+      
 
               if (this.x < -20)
                   this.x = width + 20;
@@ -1666,10 +1538,6 @@
       }
 
 
-      /* ---------------------------------------------------------
-        RESIZE
-        --------------------------------------------------------- */
-
       function resize() {
 
           width =
@@ -1723,11 +1591,6 @@
           }
       }
 
-
-      /* ---------------------------------------------------------
-        CONNECTIONS
-        --------------------------------------------------------- */
-
       function drawConnections() {
 
           for (
@@ -1766,10 +1629,7 @@
                           CONNECTION_DISTANCE;
 
 
-                      /*
-                      * Make the network stronger
-                      * around the cursor.
-                      */
+                
 
                       if (pointer.active) {
 
@@ -1829,10 +1689,7 @@
       }
 
 
-      /* ---------------------------------------------------------
-        CURSOR GLOW
-        --------------------------------------------------------- */
-
+  
       function drawCursorGlow() {
 
           if (!pointer.active)
@@ -1884,9 +1741,6 @@
       }
 
 
-      /* ---------------------------------------------------------
-        ANIMATION
-        --------------------------------------------------------- */
 
       function animate() {
 
@@ -1946,9 +1800,7 @@
       }
 
 
-      /* ---------------------------------------------------------
-        MOUSE
-        --------------------------------------------------------- */
+
 
       window.addEventListener(
           "mousemove",
@@ -1998,9 +1850,6 @@
       );
 
 
-      /* ---------------------------------------------------------
-        TOUCH / GESTURE
-        --------------------------------------------------------- */
 
       window.addEventListener(
           "touchstart",
@@ -2073,10 +1922,6 @@
       );
 
 
-      /* ---------------------------------------------------------
-        START
-        --------------------------------------------------------- */
-
       window.addEventListener(
           "resize",
           resize
@@ -2087,7 +1932,7 @@
 
   })();
   </script>
-  <!-- ===== CONTACT POPUP ===== -->
+
 <div id="contactOverlay">
   <div class="contact-popup">
     <button id="closeContact" class="close-contact">✕</button>
@@ -2096,7 +1941,6 @@
 </div>
 
 <script>
-// ---- Contact popup ----
 const contactBtn = document.getElementById('contactBtn');
 const overlay = document.getElementById('contactOverlay');
 const closeBtn = document.getElementById('closeContact');
