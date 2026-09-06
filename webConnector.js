@@ -1,13 +1,3 @@
-/*
-  Omanshu Portfolio — general web/basic-question connector.
-  No Python, no API key, no LLM.
-
-  Routing handled by ai.html:
-  - Personal/resume questions -> resumeData.js
-  - Arithmetic -> local calculator
-  - Basic factual questions -> local facts / Wikipedia
-  - Unknown -> honest fallback
-*/
 
 (function () {
   const COMMON_FACTS = {
@@ -43,7 +33,6 @@
     if (!/^[0-9+\-*/().% \t]+$/.test(expr)) return null;
 
     try {
-      // Strict whitelist above means there are no identifiers, strings, or calls.
       const result = Function('"use strict"; return (' + expr + ')')();
       if (typeof result !== "number" || !Number.isFinite(result)) return null;
       return Number.isInteger(result) ? String(result) : String(Number(result.toFixed(10)));
