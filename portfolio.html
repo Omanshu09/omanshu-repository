@@ -8,7 +8,6 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
-    /* ── reset & base ── */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -54,7 +53,6 @@
       height: 100vh;
     }
 
-    /* ── left rail ── */
     .rail {
       position: fixed;
       left: 0;
@@ -83,7 +81,6 @@
 
     @media(max-width:820px) { .rail { display: none; } }
 
-    /* ── progress bar ── */
     .progress-bar {
       position: fixed;
       top: 0;
@@ -94,7 +91,6 @@
       z-index: 200;
     }
 
-    /* ── top nav ── */
     .topnav {
       position: fixed;
       top: 0;
@@ -138,7 +134,7 @@
     }
 
     .mobile-home-btn {
-      display: none; /* hidden by default, shown via JS on hero */
+      display: none; 
       width: 34px;
       height: 34px;
       border-radius: 50%;
@@ -236,7 +232,7 @@
         display: none !important;
       }
       .mobile-home-btn {
-        display: none; /* hidden by default, shown via JS on hero */
+        display: none; 
       }
       .nav-toggle {
         display: none !important;
@@ -256,7 +252,6 @@
       }
     }
 
-    /* ── page stage ── */
     .page-stage {
       position: relative;
       width: 100%;
@@ -323,7 +318,6 @@
       padding-bottom: 30px;
     }
 
-    /* ── hero ── */
     .hero {
       overflow: hidden;
     }
@@ -418,7 +412,6 @@
       to { opacity: 1; transform: translate(0); }
     }
 
-    /* ── hero photo ── */
     .hero-photo {
       position: absolute;
       right: 8vw;
@@ -510,7 +503,6 @@
       cursor: pointer;
     }
 
-    /* ── hero side nav ── */
     .hero-side-nav {
       position: absolute;
       right: -120px;
@@ -587,7 +579,6 @@
       background: linear-gradient(#667085, transparent);
     }
 
-    /* ── section headers ── */
     .sec-head { margin-bottom: 32px; }
     .sec-tag {
       font-family: 'IBM Plex Mono', monospace;
@@ -610,7 +601,6 @@
       font-size: 15px;
     }
 
-    /* ── content animation ── */
     .page-section.active .animate-in {
       animation: contentIn .7s cubic-bezier(.16,1,.3,1) both;
     }
@@ -625,7 +615,6 @@
       to   { opacity: 1; transform: translateY(0) rotateX(0); }
     }
 
-    /* ── about ── */
     .about-grid {
       display: grid;
       grid-template-columns: 1.3fr 1fr;
@@ -682,7 +671,6 @@
       margin-top: 4px;
     }
 
-    /* ── skills ── */
     .skill-terraces { display: flex; flex-direction: column; gap: 1px; }
     .skill-row {
       display: grid;
@@ -725,7 +713,6 @@
       border-color: #6C63FF;
     }
 
-    /* ── experience ── */
     .exp-item {
       display: grid;
       grid-template-columns: 180px 1fr;
@@ -757,7 +744,6 @@
       max-width: 60ch;
     }
 
-    /* ── projects ── */
     .proj-grid {
       display: flex;
       flex-direction: column;
@@ -823,8 +809,6 @@
       color: #667085;
       margin-top: 6px;
     }
-
-    /* ── PROJECT MODAL ── */
     .project-modal-overlay {
       position: fixed;
       inset: 0;
@@ -984,8 +968,6 @@
       .project-modal-content h2 { font-size: 24px; }
       .project-modal-close { width: 36px; height: 36px; font-size: 22px; }
     }
-
-    /* ── education ── */
     .edu-list {
       display: flex;
       flex-direction: column;
@@ -1011,8 +993,6 @@
       color: #667085;
       margin-top: 4px;
     }
-
-    /* ── certifications ── */
     .cert-list {
       display: flex;
       flex-direction: column;
@@ -1103,7 +1083,6 @@
       display: none;
     }
 
-    /* ── Modal overlay for certifications ── */
     .cert-modal {
       position: fixed;
       inset: 0;
@@ -1281,7 +1260,6 @@
       }
     }
 
-    /* ── contact ── */
     .contact-section { text-align: left; }
     .contact-big {
       font-family: 'Space Grotesk', sans-serif;
@@ -1309,7 +1287,6 @@
     }
     .contact-links span { color: #A7B0C0; }
 
-    /* ── responsive ── */
     @media(max-width:1100px) {
       .hero-photo { right: 4vw; width: 230px; height: 230px; }
       .hero-side-nav { right: -90px; }
@@ -1372,7 +1349,6 @@
       .cert-item { flex-direction: column; gap: 4px; }
     }
 
-    /* reduced motion */
     @media(prefers-reduced-motion:reduce) {
       * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
     }
@@ -1382,7 +1358,6 @@
       outline-offset: 3px;
     }
 
-    /* ── BACK BUTTON ── */
     .section-back-wrapper {
       display: none;
       margin-bottom: 20px;
@@ -1430,10 +1405,8 @@
     <img src="omanshu-bhatt.jpg" alt="Omanshu Bhatt enlarged" id="photoLightboxImg">
   </div>
 
-  <!-- progress bar -->
   <div class="progress-bar" id="progressBar"></div>
 
-  <!-- top nav -->
   <nav class="topnav">
     <div class="topnav-left">
       <div class="logo"><span class="dotmark"></span> OMANSHU BHATT</div>
@@ -1457,7 +1430,6 @@
     </div>
   </nav>
 
-  <!-- contour bg -->
   <svg class="contour-bg" viewBox="0 0 1600 2400" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
     <g fill="none" stroke="#C99B4A" stroke-width="1">
       <path d="M-50,300 C 200,220 400,380 650,300 S 1100,180 1650,320" />
@@ -1481,8 +1453,6 @@
 
   <div class="wrap">
     <main class="page-stage" id="pageStage">
-
-      <!-- ==================== HERO ==================== -->
       <section class="page-section hero active" id="hero" data-page="home">
         <div class="section-inner hero-inner">
           <div class="eyebrow"> Software and Computer Systems</div>
@@ -1496,8 +1466,6 @@
           <div class="hero-photo">
             <img src="omanshu-bhatt.jpg" alt="Omanshu Bhatt">
           </div>
-
-          <!-- side nav -->
           <div class="hero-side-nav">
             <button class="side-nav-btn" data-section="about"><span>01</span>ABOUT <b>↗</b></button>
             <button class="side-nav-btn" data-section="skills"><span>02</span>SKILLS <b>↗</b></button>
@@ -1513,7 +1481,6 @@
         </div>
       </section>
 
-      <!-- ==================== ABOUT ==================== -->
       <section class="page-section" id="about" data-page="about">
         <div class="section-inner">
           <div class="section-back-wrapper animate-in">
@@ -1538,8 +1505,6 @@
           </div>
         </div>
       </section>
-
-      <!-- ==================== SKILLS ==================== -->
       <section class="page-section" id="skills" data-page="skills">
         <div class="section-inner">
           <div class="section-back-wrapper animate-in">
@@ -1591,7 +1556,6 @@
         </div>
       </section>
 
-      <!-- ==================== EXPERIENCE ==================== -->
       <section class="page-section" id="experience" data-page="experience">
         <div class="section-inner">
           <div class="section-back-wrapper animate-in">
@@ -1620,7 +1584,6 @@
         </div>
       </section>
 
-      <!-- ==================== PROJECTS ==================== -->
       <section class="page-section" id="projects" data-page="projects">
         <div class="section-inner">
           <div class="section-back-wrapper animate-in">
@@ -1633,7 +1596,6 @@
           </div>
           <div class="proj-grid animate-in">
             
-            <!-- ===== PROJECT 1: ATLAS ===== -->
             <div class="proj-card" data-project="atlas">
               <div class="proj-num">01</div>
               <div>
@@ -1645,7 +1607,6 @@
               </div>
             </div>
 
-            <!-- ===== PROJECT 2: AI Codebase Intelligence ===== -->
             <div class="proj-card" data-project="codebase">
               <div class="proj-num">02</div>
               <div>
@@ -1657,7 +1618,6 @@
               </div>
             </div>
 
-            <!-- ===== PROJECT 3: Deepfake Image Integrity ===== -->
             <div class="proj-card" data-project="deepfake">
               <div class="proj-num">03</div>
               <div>
@@ -1669,7 +1629,6 @@
               </div>
             </div>
 
-            <!-- ===== PROJECT 4: NEXUS 3D ===== -->
             <div class="proj-card" data-project="nexus">
               <div class="proj-num">04</div>
               <div>
@@ -1685,7 +1644,6 @@
         </div>
       </section>
 
-      <!-- ==================== EDUCATION ==================== -->
       <section class="page-section" id="education" data-page="education">
         <div class="section-inner">
           <div class="section-back-wrapper animate-in">
@@ -1712,7 +1670,6 @@
         </div>
       </section>
 
-      <!-- ==================== CERTIFICATIONS ==================== -->
       <section class="page-section" id="certifications" data-page="certifications">
         <div class="section-inner">
           <div class="section-back-wrapper animate-in">
@@ -1724,7 +1681,6 @@
           </div>
           <div class="cert-list animate-in">
 
-            <!-- CommBank -->
             <div class="cert-item" data-cert="Commonwealth Bank">
               <div class="cert-header" tabindex="0" role="button">
                 <div class="cert-header-left">
@@ -1763,7 +1719,6 @@
               </div>
             </div>
 
-            <!-- Oracle -->
             <div class="cert-item" data-cert="oracle">
               <div class="cert-header" tabindex="0" role="button">
                 <div class="cert-header-left">
@@ -1801,7 +1756,6 @@
               </div>
             </div>
 
-            <!-- Tata Young Professional -->
             <div class="cert-item" data-cert="tata-yp">
               <div class="cert-header" tabindex="0" role="button">
                 <div class="cert-header-left">
@@ -1838,7 +1792,6 @@
               </div>
             </div>
 
-            <!-- Tata Cybersecurity -->
             <div class="cert-item" data-cert="tata-cyber">
               <div class="cert-header" tabindex="0" role="button">
                 <div class="cert-header-left">
@@ -1875,7 +1828,6 @@
               </div>
             </div>
 
-            <!-- Deloitte -->
             <div class="cert-item" data-cert="deloitte">
               <div class="cert-header" tabindex="0" role="button">
                 <div class="cert-header-left">
@@ -1912,7 +1864,6 @@
               </div>
             </div>
 
-            <!-- NASA -->
             <div class="cert-item" data-cert="nasa">
               <div class="cert-header" tabindex="0" role="button">
                 <div class="cert-header-left">
@@ -1949,7 +1900,6 @@
               </div>
             </div>
 
-            <!-- Udemy -->
             <div class="cert-item" data-cert="udemy">
               <div class="cert-header" tabindex="0" role="button">
                 <div class="cert-header-left">
@@ -1987,7 +1937,6 @@
               </div>
             </div>
 
-            <!-- Cisco -->
             <div class="cert-item" data-cert="cisco">
               <div class="cert-header" tabindex="0" role="button">
                 <div class="cert-header-left">
@@ -2024,7 +1973,6 @@
               </div>
             </div>
 
-            <!-- ===== NEW: Oxford AI, Justice and Rule of Law ===== -->
             <div class="cert-item" data-cert="oxford-ai">
               <div class="cert-header" tabindex="0" role="button">
                 <div class="cert-header-left">
@@ -2066,7 +2014,6 @@
         </div>
       </section>
 
-      <!-- ==================== CONTACT ==================== -->
       <section class="page-section contact-section" id="contact" data-page="contact">
         <div class="section-inner">
           <div class="section-back-wrapper animate-in">
@@ -2087,9 +2034,6 @@
     </main>
   </div>
 
-  <!-- =========================================================
-       PROJECT MODAL OVERLAY
-       ========================================================= -->
   <div class="project-modal-overlay" id="projectModal" role="dialog" aria-modal="true">
     <div class="project-modal-content" id="projectModalContent">
       <button class="project-modal-close" id="projectModalClose" aria-label="Close project details">✕</button>
@@ -2097,9 +2041,7 @@
     </div>
   </div>
 
-  <!-- =========================================================
-       CERTIFICATION MODAL OVERLAY
-       ========================================================= -->
+  
   <div class="cert-modal" id="certModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="cert-modal-content" id="certModalContent">
       <button class="cert-modal-close" id="certModalClose" aria-label="Close certification details">✕</button>
@@ -2108,15 +2050,11 @@
   </div>
 
   <script>
-    /* =========================================================
-       PROJECT MODAL LOGIC
-       ========================================================= */
 
     const projectModal = document.getElementById('projectModal');
     const projectModalBody = document.getElementById('projectModalBody');
     const projectModalClose = document.getElementById('projectModalClose');
 
-    // Project data: detailed descriptions
     const projectData = {
       atlas: {
         title: 'ATLAS — Web Research & Evidence Engine',
@@ -2380,7 +2318,6 @@
       projectModalBody.innerHTML = '';
     }
 
-    // Click on project card
     document.querySelectorAll('.proj-card').forEach(card => {
       card.addEventListener('click', (e) => {
         const key = card.dataset.project;
@@ -2399,9 +2336,7 @@
       }
     });
 
-    /* =========================================================
-       SECTION NAVIGATION ENGINE
-       ========================================================= */
+   
 
     const sections = [
       'hero', 'about', 'skills', 'experience',
@@ -2491,7 +2426,7 @@
       });
 
       currentSection = targetId;
-      updateHomeButtonVisibility(); // update home button visibility
+      updateHomeButtonVisibility(); 
 
       if (history.replaceState && targetId !== 'hero') {
         history.replaceState(null, '', '#' + targetId);
@@ -2528,7 +2463,6 @@
       });
     });
 
-    // mobile nav
     const navToggle = document.getElementById('navToggle');
     const navLinksContainer = document.getElementById('navLinks');
 
@@ -2544,7 +2478,6 @@
       navToggle.setAttribute('aria-expanded', opened);
     });
 
-    // hash on load
     (function openHash() {
       const hash = window.location.hash.replace('#', '');
       if (hash && sections.includes(hash)) {
@@ -2563,7 +2496,6 @@
       }
     })();
 
-    // keyboard
     document.addEventListener('keydown', (e) => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
       const idx = sections.indexOf(currentSection);
@@ -2585,7 +2517,6 @@
       }
     });
 
-    // swipe
     let touchStartX = 0;
     let touchStartY = 0;
     let isSwiping = false;
@@ -2618,9 +2549,6 @@
       }
     }, { passive: true });
 
-    /* =========================================================
-       CERTIFICATION MODAL LOGIC
-       ========================================================= */
 
     const certModal = document.getElementById('certModal');
     const certModalBody = document.getElementById('certModalBody');
@@ -2689,13 +2617,9 @@
       originalShowSection(targetId, direction);
     };
 
-    // initial update
     updateHomeButtonVisibility();
   </script>
 
-  <!-- =========================================================
-       ISOLATED GESTURE BACKGROUND
-       ========================================================= -->
 
   <canvas id="gestureCanvas"></canvas>
 
@@ -2724,9 +2648,7 @@
       let height = 0;
       let dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-      /* ---------------------------------------------------------
-         POINTER
-         --------------------------------------------------------- */
+
 
       const pointer = {
         x: -1000,
@@ -2738,9 +2660,6 @@
       };
 
 
-      /* ---------------------------------------------------------
-         PARTICLES
-         --------------------------------------------------------- */
 
       let particles = [];
 
@@ -2779,11 +2698,6 @@
 
 
         update() {
-
-          /*
-           * Very subtle natural movement
-           */
-
           this.vx +=
             Math.sin(
               performance.now() * 0.0005 +
@@ -2795,14 +2709,6 @@
               performance.now() * 0.0004 +
               this.phase
             ) * 0.0004;
-
-
-          /*
-           * CURSOR GESTURE
-           *
-           * Only particles respond.
-           * Nothing else on your website is touched.
-           */
 
           if (pointer.active) {
 
@@ -2830,10 +2736,6 @@
                 1 -
                 distance / radius;
 
-              /*
-               * Cursor pushes particles outward
-               */
-
               this.vx -=
                 (dx / distance) *
                 strength *
@@ -2844,11 +2746,6 @@
                 strength *
                 0.035;
 
-
-              /*
-               * Movement direction
-               * creates a flowing gesture
-               */
 
               this.vx +=
                 (pointer.x - pointer.lastX) *
@@ -2863,20 +2760,12 @@
           }
 
 
-          /*
-           * Return slowly to calm movement
-           */
-
           this.vx *= 0.94;
           this.vy *= 0.94;
 
           this.x += this.vx;
           this.y += this.vy;
 
-
-          /*
-           * Screen wrapping
-           */
 
           if (this.x < -20)
             this.x = width + 20;
@@ -2931,11 +2820,6 @@
         }
       }
 
-
-      /* ---------------------------------------------------------
-         RESIZE
-         --------------------------------------------------------- */
-
       function resize() {
 
         width =
@@ -2989,11 +2873,6 @@
         }
       }
 
-
-      /* ---------------------------------------------------------
-         CONNECTIONS
-         --------------------------------------------------------- */
-
       function drawConnections() {
 
         for (
@@ -3031,11 +2910,6 @@
                 distance /
                 CONNECTION_DISTANCE;
 
-
-              /*
-               * Make the network stronger
-               * around the cursor.
-               */
 
               if (pointer.active) {
 
@@ -3094,11 +2968,6 @@
         }
       }
 
-
-      /* ---------------------------------------------------------
-         CURSOR GLOW
-         --------------------------------------------------------- */
-
       function drawCursorGlow() {
 
         if (!pointer.active)
@@ -3149,11 +3018,6 @@
         ctx.fill();
       }
 
-
-      /* ---------------------------------------------------------
-         ANIMATION
-         --------------------------------------------------------- */
-
       function animate() {
 
         ctx.clearRect(
@@ -3186,10 +3050,6 @@
         }
 
 
-        /*
-         * Update pointer history
-         */
-
         pointer.lastX +=
           (
             pointer.x -
@@ -3211,10 +3071,6 @@
         );
       }
 
-
-      /* ---------------------------------------------------------
-         MOUSE
-         --------------------------------------------------------- */
 
       window.addEventListener(
         "mousemove",
@@ -3263,10 +3119,6 @@
         }
       );
 
-
-      /* ---------------------------------------------------------
-         TOUCH / GESTURE
-         --------------------------------------------------------- */
 
       window.addEventListener(
         "touchstart",
@@ -3336,9 +3188,6 @@
       );
 
 
-      /* ---------------------------------------------------------
-         START
-         --------------------------------------------------------- */
 
       window.addEventListener(
         "resize",
